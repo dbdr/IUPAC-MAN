@@ -50,18 +50,18 @@ function getBond(a1, a2, type) {
 }
 
 function getMolecule() {
-	console.log(atoms);
 	let atomIDs = '';
 	let elementTypes = '';
 	let bondArray = '';
 
 	for (const id in atoms) {
 		atomIDs += atoms[id].id + ' ';
+		elementTypes += atoms[id].symbol + ' ';
 	}
 
 	for (const id in bonds) {
 		const b = bonds[id];
-		bondArray += `<bond id="${b.id}" atomRefs2="${b.a1} ${b.a2}" order="${b.type}"/>\n`;
+		bondArray += `\n<bond id="${b.id}" atomRefs2="${b.a1} ${b.a2}" order="${b.type}"/>`;
 	}
 	
 	let mol = `<?xml version="1.0" encoding="UTF-8"?>
@@ -70,8 +70,7 @@ function getMolecule() {
   <MChemicalStruct>
     <molecule molID="m1">
       <atomArray atomID="${atomIDs}" elementType="${elementTypes}"/>
-      <bondArray>
-${bondArray}
+      <bondArray>${bondArray}
       </bondArray>
     </molecule>
   </MChemicalStruct>
