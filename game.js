@@ -30,12 +30,10 @@ IUPACman.prototype = {
 
     preload: function () {
 
-        //  We need this because the assets are on Amazon S3
-        //  Remove the next 2 lines if running locally
-        this.load.baseURL = 'http://files.phaser.io.s3.amazonaws.com/codingtips/issue005/';
-        this.load.crossOrigin = 'anonymous';
-
         this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
+
+		this.load.audio('eating', 'assets/sounds/eating.ogg');
+		this.load.audio('opening_song', 'assets/sounds/opening_song.ogg');
 
         //  Needless to say, graphics (C)opyright Namco
 
@@ -48,6 +46,14 @@ IUPACman.prototype = {
         this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
 
         this.pacman.play('munch');
+
+		this.eating = game.add.audio('eating');
+		this.opening_song = game.add.audio('opening_song');
+
+		//  These take time to decode, so we can't play them instantly
+		//  Using setDecodedCallback we can be notified when they're ALL ready for use.
+		//  The audio files could decode in ANY order, we can never be sure which it'll be.
+		this.sound.setDecodedCallback([ this.eating, this.opening_song ], this.start, this);
 
 		this.molGraphics = game.add.graphics();
 		this.molGraphics.lineStyle(3, 0xffffff, 1);
@@ -74,6 +80,11 @@ IUPACman.prototype = {
 		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => { this.keyMove(+1, +1,  30); });
     },
 
+	start: function () {
+		console.log('ready');
+		this.opening_song.play();
+	},
+
     keyMove: function (dx, dy, angle) {
 		this.nextMoveX = dx;
 		this.nextMoveY = dy;
@@ -87,6 +98,8 @@ IUPACman.prototype = {
 		if (this.nextMoveX === 0 && this.nextMoveY === 0)
 			return;
 
+		this.eating.play();
+		
 		this.moveX = this.nextMoveX;
 		this.moveY = this.nextMoveY;
 		this.pacman.angle = this.nextAngle;
