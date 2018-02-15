@@ -2,29 +2,26 @@
 
 'use strict';
 
-let x = 0, y = 0;
-
 let atoms = {};
 let bonds = {};
 
 let id = 0;
 
-function addBond(dx, dy, type) {
-	const source = getCurrentAtom();
-	x += dx;
-	y += dy;
-	const dest = getCurrentAtom();
+function addBond(x, y, dx, dy, type) {
+	const source = getAtom(x, y);
+	const dest = getAtom(x + dx, y + dy);
 	const b = getBond(source, dest, type);
 	console.log(getMolecule());
 }
 
-function getCurrentAtom() {
+function getAtom(x, y) {
 	const key = x + ',' + y;
 	let res;
 	if (key in atoms)
 		res = atoms[key];
 	else {
-		res = { id: id++, x: x, y: y };
+		console.log(key);
+		res = { id: id++, x: x, y: y, atno: 6, symbol: 'C' };
 		atoms[key] = res;
 	}
 	return res;

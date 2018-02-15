@@ -6,11 +6,9 @@ const game = new Phaser.Game(500, 500, Phaser.AUTO);
 
 const bondLength = 32;
 const doubleBondRatio = 14;
+const xFactor = Math.sqrt(3);
 
 const IUPACman = function (game) {
-
-	this.xFactor = Math.sqrt(3);
-	
 	this.movesLeft = 0;
 	this.moveX = 0;
 	this.moveY = 0;
@@ -44,9 +42,12 @@ IUPACman.prototype = {
 
 	create: function () {
 
-		this.pacman = this.add.sprite(game.width / 2, game.height / 2, 'pacman', 0);
+		const lx = Math.round(game.width / 2 / xFactor); // logical x, not scaled
+		this.pacman = this.add.sprite(lx * xFactor, game.height / 2, 'pacman', 0);
+		this.pacman.lx = lx;
 		this.pacman.anchor.set(0.5);
 		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+		this.pacman.lx = this.pacman.x / xFactor; // logical x, not scaled
 
 		this.pacman.play('munch');
 
@@ -91,6 +92,10 @@ IUPACman.prototype = {
 		this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => { this.bondType = 3; });
+
+		this.game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(() => { this.keyAtom('C', 6); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => { this.keyAtom('O', 8, '#F00'); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(() => { this.keyAtom('N', 7, '#00F'); });
 	},
 
 	start: function () {
@@ -104,6 +109,35 @@ IUPACman.prototype = {
 		this.nextAngle = angle;
 	},
 
+	keyAtom: function(symbol, atno, color) {
+		this.nextSymbol = symbol;
+		this.nextAtno = atno;
+		this.nextColor = color;
+	},
+
+	applyAtom : function() {
+		if (this.movesLeft > 0)
+			return;
+
+		if (! this.nextSymbol)
+			return;
+
+		const atom = getAtom(this.pacman.lx, this.pacman.y);
+		atom.atno = this.nextAtno;
+		atom.symbol = this.nextSymbol;
+
+		if (atom.symbolText)
+			atom.symbolText.destroy();
+
+		if (atom.symbol !== 'C') {
+			const style = {fill : this.nextColor};
+			atom.symbolText = this.game.add.text(atom.x * xFactor, atom.y, atom.symbol, style);
+			atom.symbolText.anchor.set(0.5, 0.5);
+		}
+		
+		this.nextSymbol = this.nextAtno = null;
+	},
+	
 	startMove : function () {
 		if (this.movesLeft > 0)
 			return;
@@ -124,7 +158,7 @@ IUPACman.prototype = {
 	},
 
 	addBond : function () {
-		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + bondLength * this.moveX * this.xFactor, this.pacman.y + bondLength * this.moveY);
+		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + bondLength * this.moveX * xFactor, this.pacman.y + bondLength * this.moveY);
 
 		if (this.bondType !== 1) {
 			const dx = (line.end.x - line.start.x) / doubleBondRatio;
@@ -142,7 +176,7 @@ IUPACman.prototype = {
 			this.molGraphics.lineTo(line.end.x, line.end.y);
 		}
 		
-		addBond(this.moveX, this.moveY, this.bondType);
+		addBond(this.pacman.lx, this.pacman.y, this.moveX * bondLength, this.moveY * bondLength, this.bondType);
 		this.bondType = 1;
 	},
 	
@@ -150,13 +184,15 @@ IUPACman.prototype = {
 		if (this.movesLeft == 0)
 			return;
 
-		this.pacman.x += this.moveX * this.xFactor;
+		this.pacman.lx += this.moveX;
+		this.pacman.x += this.moveX * xFactor;
 		this.pacman.y += this.moveY;
 		this.movesLeft--;
 	},
 
 	update: function () {
 
+		this.applyAtom();
 		this.startMove();
 		this.continueMove();
 
