@@ -58,6 +58,7 @@ IUPACman.prototype = {
 		this.molGraphics = game.add.graphics();
 		this.molGraphics.lineStyle(3, 0xffffff, 1);
 
+		// Pause
 		this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
 			if (this.game.paused) {
 				this.pauseText.destroy();
@@ -70,6 +71,11 @@ IUPACman.prototype = {
 			this.game.paused = ! this.game.paused;
 		});
 
+		// Mute
+		this.game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(() => {
+			this.game.sound.mute = ! this.game.sound.mute;
+		});
+		
 		this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
 
