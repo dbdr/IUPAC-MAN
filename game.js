@@ -52,28 +52,26 @@ IUPACman.prototype = {
 		this.molGraphics = game.add.graphics();
 		this.molGraphics.lineStyle(3, 0xffffff, 1);
 
-		const me = this;
-
-		this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {
-			if (me.game.paused) {
-				me.pauseText.destroy();
+		this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
+			if (this.game.paused) {
+				this.pauseText.destroy();
 			}
 			else {
 				const style = {fill : '#FFF'};
-				me.pauseText = me.game.add.text(me.game.width * 0.5, me.game.height * 0.5, "Paused", style);
-				me.pauseText.anchor.set(0.5, 0.5);
+				this.pauseText = this.game.add.text(this.game.width * 0.5, this.game.height * 0.5, "Paused", style);
+				this.pauseText.anchor.set(0.5, 0.5);
 			}
-			me.game.paused = ! me.game.paused;
+			this.game.paused = ! this.game.paused;
 		});
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(function() { me.keyMove( 0, -2, 270); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function() { me.keyMove( 0, +2,  90); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(function() { me.keyMove(-1, -1, 210); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(function() { me.keyMove(-1, +1, 120); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(() => { this.keyMove(-1, -1, 210); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(() => { this.keyMove(-1, +1, 120); });
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function() { me.keyMove(+1, -1, 300); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(function() { me.keyMove(+1, +1,  30); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => { this.keyMove(+1, -1, 300); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => { this.keyMove(+1, +1,  30); });
     },
 
     keyMove: function (dx, dy, angle) {
