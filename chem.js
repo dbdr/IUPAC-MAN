@@ -9,12 +9,12 @@ let bonds = {};
 
 let id = 0;
 
-function addBond(dx, dy) {
+function addBond(dx, dy, type) {
 	const source = getCurrentAtom();
 	x += dx;
 	y += dy;
 	const dest = getCurrentAtom();
-	const b = getBond(source, dest);
+	const b = getBond(source, dest, type);
 	console.log(getMolecule());
 }
 
@@ -30,7 +30,7 @@ function getCurrentAtom() {
 	return res;
 }
 
-function getBond(a1, a2) {
+function getBond(a1, a2, type) {
 	if (a1.id < a2.id) {
 		const tmp = a1;
 		a1 = a2;
@@ -38,10 +38,12 @@ function getBond(a1, a2) {
 	}
 	let key = a1.id + '-' + a2.id;
 	let res;
-	if (key in bonds)
+	if (key in bonds) {
 		res = bonds[key];
+		res.type = type;
+	}
 	else {
-		res = { id: id++, a1: a1.id, a2: a2.id };
+		res = { id: id++, a1: a1.id, a2: a2.id, type: type };
 		bonds[key] = res;
 	}
 	return res;
@@ -59,7 +61,7 @@ function getMolecule() {
 
 	for (const id in bonds) {
 		const b = bonds[id];
-		bondArray += `<bond id="${b.id}" atomRefs2="${b.a1} ${b.a2}" order="1"/>\n`;
+		bondArray += `<bond id="${b.id}" atomRefs2="${b.a1} ${b.a2}" order="${b.type}"/>\n`;
 	}
 	
 	let mol = `<?xml version="1.0" encoding="UTF-8"?>

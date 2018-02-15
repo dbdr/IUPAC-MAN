@@ -4,9 +4,11 @@
 
 const game = new Phaser.Game(500, 500, Phaser.AUTO);
 
+const bondLength = 32;
+const doubleBondRatio = 14;
+
 const IUPACman = function (game) {
 
-	this.bondLength = 32;
 	this.xFactor = Math.sqrt(3);
 	
 	this.movesLeft = 0;
@@ -14,6 +16,7 @@ const IUPACman = function (game) {
 	this.moveY = 0;
 	this.nextMoveX = 0;
 	this.nextMoveY = 0;
+	this.bondType = 1;
 };
 
 IUPACman.prototype = {
@@ -84,6 +87,10 @@ IUPACman.prototype = {
 
 		this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => { this.keyMove(+1, -1, 300); });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => { this.keyMove(+1, +1,  30); });
+
+		this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => { this.bondType = 3; });
     },
 
 	start: function () {
@@ -110,19 +117,33 @@ IUPACman.prototype = {
 		this.moveY = this.nextMoveY;
 		this.pacman.angle = this.nextAngle;
 		
-		this.movesLeft = this.bondLength;
+		this.movesLeft = bondLength;
 		this.nextMoveX = this.nextMoveY = 0;
 
 		this.addBond();
 	},
 
 	addBond : function () {
-		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + this.bondLength * this.moveX * this.xFactor, this.pacman.y + this.bondLength * this.moveY);
+		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + bondLength * this.moveX * this.xFactor, this.pacman.y + bondLength * this.moveY);
 
-		this.molGraphics.moveTo(line.start.x, line.start.y);
-		this.molGraphics.lineTo(line.end.x, line.end.y);
+		if (this.bondType !== 1) {
+			const dx = (line.end.x - line.start.x) / doubleBondRatio;
+			const dy = (line.end.y - line.start.y) / doubleBondRatio;
+			
+			this.molGraphics.moveTo(line.start.x + dy, line.start.y - dx);
+			this.molGraphics.lineTo(line.end.x   + dy, line.end.y   - dx);
 
-		addBond(this.moveX, this.moveY);
+			this.molGraphics.moveTo(line.start.x - dy, line.start.y + dx);
+			this.molGraphics.lineTo(line.end.x   - dy, line.end.y   + dx);
+		}
+
+		if (this.bondType !== 2) {
+			this.molGraphics.moveTo(line.start.x, line.start.y);
+			this.molGraphics.lineTo(line.end.x, line.end.y);
+		}
+		
+		addBond(this.moveX, this.moveY, this.bondType);
+		this.bondType = 1;
 	},
 	
 	continueMove : function () {
