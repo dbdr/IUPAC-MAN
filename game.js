@@ -21,34 +21,34 @@ const IUPACman = function (game) {
 
 IUPACman.prototype = {
 
-    init: function () {
+	init: function () {
 
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.pageAlignHorizontally = true;
-        this.scale.pageAlignVertically = true;
+		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.scale.pageAlignHorizontally = true;
+		this.scale.pageAlignVertically = true;
 
-        Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+		Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
-    },
+	},
 
-    preload: function () {
+	preload: function () {
 
-        this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
+		this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
 
 		this.load.audio('eating', 'assets/sounds/eating.ogg');
 		this.load.audio('opening_song', 'assets/sounds/opening_song.ogg');
 
-        //  Needless to say, graphics (C)opyright Namco
+		//  Needless to say, graphics (C)opyright Namco
 
-    },
+	},
 
-    create: function () {
+	create: function () {
 
-        this.pacman = this.add.sprite(game.width / 2, game.height / 2, 'pacman', 0);
-        this.pacman.anchor.set(0.5);
-        this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+		this.pacman = this.add.sprite(game.width / 2, game.height / 2, 'pacman', 0);
+		this.pacman.anchor.set(0.5);
+		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
 
-        this.pacman.play('munch');
+		this.pacman.play('munch');
 
 		this.eating = game.add.audio('eating');
 		this.opening_song = game.add.audio('opening_song');
@@ -91,18 +91,18 @@ IUPACman.prototype = {
 		this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => { this.bondType = 3; });
-    },
+	},
 
 	start: function () {
 		console.log('ready');
 		this.opening_song.play();
 	},
 
-    keyMove: function (dx, dy, angle) {
+	keyMove: function (dx, dy, angle) {
 		this.nextMoveX = dx;
 		this.nextMoveY = dy;
 		this.nextAngle = angle;
-    },
+	},
 
 	startMove : function () {
 		if (this.movesLeft > 0)
@@ -155,12 +155,12 @@ IUPACman.prototype = {
 		this.movesLeft--;
 	},
 
-    update: function () {
+	update: function () {
 
-        this.startMove();
+		this.startMove();
 		this.continueMove();
 
-    }
+	}
 };
 
 game.state.add('Game', IUPACman, true);
