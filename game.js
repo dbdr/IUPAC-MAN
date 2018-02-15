@@ -102,6 +102,8 @@ IUPACman.prototype = {
 
 		this.molGraphics.moveTo(line.start.x, line.start.y);
 		this.molGraphics.lineTo(line.end.x, line.end.y);
+
+		addBond(this.moveX, this.moveY);
 	},
 	
 	continueMove : function () {
