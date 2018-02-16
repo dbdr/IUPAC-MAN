@@ -79,15 +79,27 @@ IUPACman.prototype = {
 		this.game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(() => {
 			this.game.sound.mute = ! this.game.sound.mute;
 		});
+
+		const shiftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 		
 		this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
 
 		this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(() => { this.keyMove(-1, -1, 210); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(() => { this.keyMove(-1, +1, 120); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(() => {
+			if (! shiftKey.isDown)
+				this.keyMove(-1, +1, 120);
+			else
+				this.keyMove(-2, 0,  180);
+		});
 
 		this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => { this.keyMove(+1, -1, 300); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => { this.keyMove(+1, +1,  30); });
+		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => {
+			if (! shiftKey.isDown)
+				this.keyMove(+1, +1,  30);
+			else
+				this.keyMove(+2, 0,    0);
+		});
 
 		this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
 		this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
