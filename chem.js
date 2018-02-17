@@ -44,6 +44,10 @@ function getBond(a1, a2, type) {
 	return res;
 }
 
+function getIUPACName() {
+	return computeName(getMolecule());
+}
+
 function getMolecule() {
 	let atomIDs = '';
 	let elementTypes = '';

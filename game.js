@@ -62,6 +62,8 @@ IUPACman.prototype = {
 		this.molGraphics = game.add.graphics();
 		this.molGraphics.lineStyle(3, 0xffffff, 1);
 
+		this.iupacName = game.add.text(0, game.height - 50, "", {fill: '#FFF'});
+		
 		// Pause
 		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
 			if (game.paused) {
@@ -136,7 +138,8 @@ IUPACman.prototype = {
 		const atom = getAtom(this.pacman.lx, this.pacman.y);
 		atom.atno = this.nextAtno;
 		atom.symbol = this.nextSymbol;
-
+		this.molChanged();
+		
 		if (atom.symbolText)
 			atom.symbolText.destroy();
 
@@ -188,6 +191,8 @@ IUPACman.prototype = {
 		}
 		
 		addBond(this.pacman.lx, this.pacman.y, this.moveX * bondLength, this.moveY * bondLength, this.bondType);
+		this.molChanged();
+		
 		this.bondType = 1;
 	},
 	
@@ -201,6 +206,10 @@ IUPACman.prototype = {
 		this.movesLeft--;
 	},
 
+	molChanged : function () {
+		getIUPACName().then((name) => this.iupacName.setText(name));
+	},
+	
 	update: function () {
 
 		this.applyAtom();
