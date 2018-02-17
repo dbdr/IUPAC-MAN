@@ -42,14 +42,11 @@ IUPACman.prototype = {
 	},
 
 	create: function () {
-		game.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		
 		this.cxnLogo = game.add.sprite(game.width - 10, game.height - 10, 'cxn-logo');
 		this.cxnLogo.anchor.set(1, 1);
 
 		this.copyrightText = game.add.text(game.width - 50, game.height - 10, "(c) 1980 ChemAxon Kft", {fontSize: 8, fill: '#FFF'});
 		this.copyrightText.anchor.set(1, 0.6);
-		this.copyrightText.scale.set(2);
 		
 		const lx = Math.round(game.width / 2 / xFactor); // logical x, not scaled
 		this.pacman = this.add.sprite(lx * xFactor, game.height / 2, 'pacman', 0);

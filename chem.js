@@ -19,6 +19,7 @@ function getAtom(x, y) {
 	if (key in atoms)
 		res = atoms[key];
 	else {
+		console.log('Creating atom', key);
 		res = { id: id++, x: x, y: y, atno: 6, symbol: 'C' };
 		atoms[key] = res;
 	}
