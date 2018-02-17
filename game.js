@@ -207,7 +207,13 @@ IUPACman.prototype = {
 	},
 
 	molChanged : function () {
-		getIUPACName().then((name) => this.iupacName.setText(name));
+		getIUPACName().then((name) => {
+			if (name.includes('errorCode')) {
+				console.log(name);
+				name = '';
+			}
+			this.iupacName.setText(name);
+		});
 	},
 	
 	update: function () {
