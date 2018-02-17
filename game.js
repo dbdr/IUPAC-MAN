@@ -123,12 +123,34 @@ IUPACman.prototype = {
 		this.opening_song.play();
 	},
 
+	invalidMove: function (dx, dy) {
+		if (this.outside(this.pacman.x + dx * bondLength * xFactor, this.pacman.y + dy * bondLength))
+			return true;
+
+		const currentBond = getExistingBond(this.pacman.lx, this.pacman.y, dx * bondLength, dy * bondLength);
+		let valenceChange = this.bondType;
+		if (currentBond)
+			valenceChange -= currentBond.type;
+		
+		const source = getAtom(this.pacman.lx, this.pacman.y);
+
+		if (getHydrogenCount(source) < valenceChange)
+			return true;
+
+		const dest = getAtom(this.pacman.lx + dx * bondLength, this.pacman.y + dy * bondLength);
+		
+		if (getHydrogenCount(dest) < valenceChange)
+			return true;
+
+		return false;
+	},
+	
 	outside: function (x, y) {
 		return x < 0 || y < 0 || x > game.width || y > game.height;
 	},
 	
 	keyMove: function (dx, dy, angle) {
-		if (this.outside(this.pacman.x + dx * bondLength * xFactor, this.pacman.y + dy * bondLength)) {
+		if (this.invalidMove(dx, dy)) {
 			this.eatpill.play();
 			return;
 		}
@@ -152,6 +174,13 @@ IUPACman.prototype = {
 			return;
 
 		const atom = getAtom(this.pacman.lx, this.pacman.y);
+
+		if (getHydrogenCount(atom) - defaultValence(atom.atno) + defaultValence(this.nextAtno) < 0) {
+			this.eatpill.play();
+			this.nextSymbol = null;
+			return;
+		}
+
 		atom.atno = this.nextAtno;
 		atom.symbol = this.nextSymbol;
 		this.molChanged();

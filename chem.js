@@ -25,13 +25,34 @@ function getAtom(x, y) {
 	return res;
 }
 
+function getExistingAtom(x, y) {
+	const key = x + ',' + y;
+	return atoms[key];
+}
+
+function getExistingBond(x, y, dx, dy) {
+	let a1 = getExistingAtom(x, y);
+	let a2 = getExistingAtom(x + dx, y + dy);
+	if (! (a1 && a2))
+		return;
+
+	if (a1.id < a2.id) {
+		const tmp = a1;
+		a1 = a2;
+		a2 = tmp;
+	}
+	
+	const key = a1.id + '-' + a2.id;
+	return bonds[key];
+}
+
 function getOrCreateBond(a1, a2, type) {
 	if (a1.id < a2.id) {
 		const tmp = a1;
 		a1 = a2;
 		a2 = tmp;
 	}
-	let key = a1.id + '-' + a2.id;
+	const key = a1.id + '-' + a2.id;
 	let res;
 	if (key in bonds) {
 		res = bonds[key];
@@ -42,6 +63,24 @@ function getOrCreateBond(a1, a2, type) {
 		bonds[key] = res;
 	}
 	return res;
+}
+
+function getHydrogenCount(a) {
+	let hCount = defaultValence(a.atno);
+	for (let key in bonds) {
+		const b = bonds[key];
+		if (b.a1 === a.id || b.a2 === a.id)
+			hCount -= b.type;
+	}
+	return hCount;
+}
+
+function defaultValence(atno) {
+	switch (atno) {
+	case 6: return 4;
+	case 7: return 3;
+	case 8: return 2;
+	}
 }
 
 function getIUPACName() {
