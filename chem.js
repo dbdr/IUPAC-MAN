@@ -7,10 +7,10 @@ let bonds = {};
 
 let id = 0;
 
-function addBond(x, y, dx, dy, type) {
+function getBond(x, y, dx, dy, type) {
 	const source = getAtom(x, y);
 	const dest = getAtom(x + dx, y + dy);
-	const b = getBond(source, dest, type);
+	return getOrCreateBond(source, dest, type);
 }
 
 function getAtom(x, y) {
@@ -25,7 +25,7 @@ function getAtom(x, y) {
 	return res;
 }
 
-function getBond(a1, a2, type) {
+function getOrCreateBond(a1, a2, type) {
 	if (a1.id < a2.id) {
 		const tmp = a1;
 		a1 = a2;

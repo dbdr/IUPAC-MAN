@@ -59,9 +59,6 @@ IUPACman.prototype = {
 		//  The audio files could decode in ANY order, we can never be sure which it'll be.
 		this.sound.setDecodedCallback([ this.eating, this.opening_song ], this.start, this);
 
-		this.molGraphics = game.add.graphics();
-		this.molGraphics.lineStyle(3, 0xffffff, 1);
-
 		this.iupacName = game.add.text(0, game.height - 50, "", {fill: '#FFF'});
 		
 		// Pause
@@ -172,26 +169,34 @@ IUPACman.prototype = {
 	},
 
 	addBond : function () {
+		const bond = getBond(this.pacman.lx, this.pacman.y, this.moveX * bondLength, this.moveY * bondLength, this.bondType);
+		this.molChanged();
+
+		if (bond.sprite)
+			bond.sprite.destroy();
+		
+		const bondGraphics = game.add.graphics();
+		bondGraphics.lineStyle(3, 0xffffff, 1);
+
 		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + bondLength * this.moveX * xFactor, this.pacman.y + bondLength * this.moveY);
 
 		if (this.bondType !== 1) {
 			const dx = (line.end.x - line.start.x) / doubleBondRatio;
 			const dy = (line.end.y - line.start.y) / doubleBondRatio;
 			
-			this.molGraphics.moveTo(line.start.x + dy, line.start.y - dx);
-			this.molGraphics.lineTo(line.end.x   + dy, line.end.y   - dx);
+			bondGraphics.moveTo(line.start.x + dy, line.start.y - dx);
+			bondGraphics.lineTo(line.end.x   + dy, line.end.y   - dx);
 
-			this.molGraphics.moveTo(line.start.x - dy, line.start.y + dx);
-			this.molGraphics.lineTo(line.end.x   - dy, line.end.y   + dx);
+			bondGraphics.moveTo(line.start.x - dy, line.start.y + dx);
+			bondGraphics.lineTo(line.end.x   - dy, line.end.y   + dx);
 		}
 
 		if (this.bondType !== 2) {
-			this.molGraphics.moveTo(line.start.x, line.start.y);
-			this.molGraphics.lineTo(line.end.x, line.end.y);
+			bondGraphics.moveTo(line.start.x, line.start.y);
+			bondGraphics.lineTo(line.end.x, line.end.y);
 		}
-		
-		addBond(this.pacman.lx, this.pacman.y, this.moveX * bondLength, this.moveY * bondLength, this.bondType);
-		this.molChanged();
+
+		bond.sprite = bondGraphics;
 		
 		this.bondType = 1;
 	},
