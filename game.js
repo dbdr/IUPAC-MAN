@@ -35,10 +35,10 @@ IUPACman.prototype = {
 		this.load.image('cxn-logo', 'assets/cxn-logo-32.png');
 
 		this.load.audio('eating', 'assets/sounds/eating.ogg');
+		this.load.audio('eatpill', 'assets/sounds/eatpill.ogg');
 		this.load.audio('opening_song', 'assets/sounds/opening_song.ogg');
 
 		//  Needless to say, graphics (C)opyright Namco
-
 	},
 
 	create: function () {
@@ -61,6 +61,7 @@ IUPACman.prototype = {
 		this.pacman.play('munch');
 
 		this.eating = game.add.audio('eating');
+		this.eatpill = game.add.audio('eatpill');
 		this.opening_song = game.add.audio('opening_song');
 
 		//  These take time to decode, so we can't play them instantly
@@ -122,7 +123,16 @@ IUPACman.prototype = {
 		this.opening_song.play();
 	},
 
+	outside: function (x, y) {
+		return x < 0 || y < 0 || x > game.width || y > game.height;
+	},
+	
 	keyMove: function (dx, dy, angle) {
+		if (this.outside(this.pacman.x + dx * bondLength * xFactor, this.pacman.y + dy * bondLength)) {
+			this.eatpill.play();
+			return;
+		}
+		
 		this.nextMoveX = dx;
 		this.nextMoveY = dy;
 		this.nextAngle = angle;
