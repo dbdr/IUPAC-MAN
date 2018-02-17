@@ -2,9 +2,9 @@
 
 'use strict';
 
-const game = new Phaser.Game(500, 500, Phaser.AUTO);
+const game = new Phaser.Game(480, 300);
 
-const bondLength = 32;
+const bondLength = 20;
 const doubleBondRatio = 14;
 const xFactor = Math.sqrt(3);
 
@@ -32,6 +32,7 @@ IUPACman.prototype = {
 	preload: function () {
 
 		this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
+		this.load.image('cxn-logo', 'assets/cxn-logo-32.png');
 
 		this.load.audio('eating', 'assets/sounds/eating.ogg');
 		this.load.audio('opening_song', 'assets/sounds/opening_song.ogg');
@@ -41,7 +42,15 @@ IUPACman.prototype = {
 	},
 
 	create: function () {
+		game.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		
+		this.cxnLogo = game.add.sprite(game.width - 10, game.height - 10, 'cxn-logo');
+		this.cxnLogo.anchor.set(1, 1);
 
+		this.copyrightText = game.add.text(game.width - 50, game.height - 10, "(c) 1980 ChemAxon Kft", {fontSize: 8, fill: '#FFF'});
+		this.copyrightText.anchor.set(1, 0.6);
+		this.copyrightText.scale.set(2);
+		
 		const lx = Math.round(game.width / 2 / xFactor); // logical x, not scaled
 		this.pacman = this.add.sprite(lx * xFactor, game.height / 2, 'pacman', 0);
 		this.pacman.lx = lx;
@@ -59,7 +68,7 @@ IUPACman.prototype = {
 		//  The audio files could decode in ANY order, we can never be sure which it'll be.
 		this.sound.setDecodedCallback([ this.eating, this.opening_song ], this.start, this);
 
-		this.iupacName = game.add.text(0, game.height - 50, "", {fill: '#FFF'});
+		this.iupacName = game.add.text(0, game.height - 50, "", {fontSize: 12, fill: '#FFF'});
 		
 		// Pause
 		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
@@ -181,8 +190,13 @@ IUPACman.prototype = {
 		const line = new Phaser.Line(this.pacman.x, this.pacman.y, this.pacman.x + bondLength * this.moveX * xFactor, this.pacman.y + bondLength * this.moveY);
 
 		if (this.bondType !== 1) {
-			const dx = (line.end.x - line.start.x) / doubleBondRatio;
-			const dy = (line.end.y - line.start.y) / doubleBondRatio;
+			// ratio of bond length to double/triple bond distance
+			let ratio = doubleBondRatio;
+			if (this.bondType === 3)
+				ratio /= 2;
+			
+			const dx = (line.end.x - line.start.x) / ratio;
+			const dy = (line.end.y - line.start.y) / ratio;
 			
 			bondGraphics.moveTo(line.start.x + dy, line.start.y - dx);
 			bondGraphics.lineTo(line.end.x   + dy, line.end.y   - dx);
