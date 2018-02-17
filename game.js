@@ -25,7 +25,7 @@ IUPACman.prototype = {
 		this.scale.pageAlignHorizontally = true;
 		this.scale.pageAlignVertically = true;
 
-		Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
+		Phaser.Canvas.setImageRenderingCrisp(game.canvas);
 
 	},
 
@@ -63,55 +63,54 @@ IUPACman.prototype = {
 		this.molGraphics.lineStyle(3, 0xffffff, 1);
 
 		// Pause
-		this.game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
-			if (this.game.paused) {
+		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
+			if (game.paused) {
 				this.pauseText.destroy();
 			}
 			else {
-				const style = {fill : '#FFF'};
-				this.pauseText = this.game.add.text(this.game.width * 0.5, this.game.height * 0.5, "Paused", style);
+				this.pauseText = game.add.text(game.width * 0.5, game.height * 0.5, "Paused", {fill : '#FFF'});
 				this.pauseText.anchor.set(0.5, 0.5);
 			}
-			this.game.paused = ! this.game.paused;
+			game.paused = ! game.paused;
 		});
 
 		// Mute
-		this.game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(() => {
-			this.game.sound.mute = ! this.game.sound.mute;
+		game.input.keyboard.addKey(Phaser.Keyboard.M).onDown.add(() => {
+			game.sound.mute = ! game.sound.mute;
 		});
 
-		const shiftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 		
-		this.game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
+		game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
+		game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(() => { this.keyMove(-1, -1, 210); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(() => {
+		game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(() => { this.keyMove(-1, -1, 210); });
+		game.input.keyboard.addKey(Phaser.Keyboard.A).onDown.add(() => {
 			if (! shiftKey.isDown)
 				this.keyMove(-1, +1, 120);
 			else
 				this.keyMove(-2, 0,  180);
 		});
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => { this.keyMove(+1, -1, 300); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => {
+		game.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(() => { this.keyMove(+1, -1, 300); });
+		game.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(() => {
 			if (! shiftKey.isDown)
 				this.keyMove(+1, +1,  30);
 			else
 				this.keyMove(+2, 0,    0);
 		});
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => { this.bondType = 3; });
+		game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(() =>   { this.bondType = 1; });
+		game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(() =>   { this.bondType = 2; });
+		game.input.keyboard.addKey(Phaser.Keyboard.THREE).onDown.add(() => { this.bondType = 3; });
 
-		this.game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(() => { this.keyAtom('C', 6); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => { this.keyAtom('O', 8, '#F00'); });
-		this.game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(() => { this.keyAtom('N', 7, '#00F'); });
+		game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(() => { this.keyAtom('C', 6); });
+		game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => { this.keyAtom('O', 8, '#F00'); });
+		game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(() => { this.keyAtom('N', 7, '#00F'); });
 	},
 
 	start: function () {
-		console.log('ready');
+		console.log('Sounds loaded');
 		this.opening_song.play();
 	},
 
@@ -143,7 +142,7 @@ IUPACman.prototype = {
 
 		if (atom.symbol !== 'C') {
 			const style = {fill : this.nextColor};
-			atom.symbolText = this.game.add.text(atom.x * xFactor, atom.y, atom.symbol, style);
+			atom.symbolText = game.add.text(atom.x * xFactor, atom.y, atom.symbol, style);
 			atom.symbolText.anchor.set(0.5, 0.5);
 		}
 		

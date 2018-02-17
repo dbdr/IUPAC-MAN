@@ -11,7 +11,6 @@ function addBond(x, y, dx, dy, type) {
 	const source = getAtom(x, y);
 	const dest = getAtom(x + dx, y + dy);
 	const b = getBond(source, dest, type);
-	console.log(getMolecule());
 }
 
 function getAtom(x, y) {
@@ -20,7 +19,6 @@ function getAtom(x, y) {
 	if (key in atoms)
 		res = atoms[key];
 	else {
-		console.log(key);
 		res = { id: id++, x: x, y: y, atno: 6, symbol: 'C' };
 		atoms[key] = res;
 	}
