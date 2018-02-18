@@ -44,11 +44,13 @@ IUPACman.prototype = {
 	create: function () {
 		this.cxnLogo = game.add.sprite(game.width - 10, game.height - 10, 'cxn-logo');
 		this.cxnLogo.anchor.set(1, 1);
+		this.cxnLogo.visible = false;
 
 		this.copyrightText = game.add.text(game.width - 50, game.height - 10, "(c) 1980 ChemAxon Kft", {fontSize: 8, fill: '#FFF'});
 		this.copyrightText.anchor.set(1, 0.6);
+		this.copyrightText.visible = false;
 		
-		const lx = Math.round(game.width / 2 / xFactor); // logical x, not scaled
+		const lx = -20; // logical x, not scaled
 		this.pacman = this.add.sprite(lx * xFactor, game.height / 2, 'pacman', 0);
 		this.pacman.lx = lx;
 		this.pacman.anchor.set(0.5);
@@ -120,7 +122,16 @@ IUPACman.prototype = {
 
 	start: function () {
 		console.log('Sounds loaded');
-		this.opening_song.play();
+		// For intro
+		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
+			game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+			this.movesLeft = Math.round((game.width - this.pacman.x) / xFactor / 2);
+			this.moveX = 1;
+			this.moveY = 0;
+			this.finalX = this.pacman.lx + this.movesLeft;
+			this.finalY = this.pacman.y;
+			this.opening_song.play();
+		});
 	},
 
 	invalidMove: function (dx, dy) {
@@ -261,13 +272,19 @@ IUPACman.prototype = {
 	},
 	
 	continueMove : function () {
-		if (this.movesLeft == 0)
+		if (this.movesLeft <= 0)
 			return;
 
 		this.pacman.lx += this.moveX;
 		this.pacman.x += this.moveX * xFactor;
 		this.pacman.y += this.moveY;
 		this.movesLeft--;
+
+		if (this.movesLeft == 0) {
+			// Only show after intro
+			this.cxnLogo.visible = true;
+			this.copyrightText.visible = true;
+		}
 	},
 
 	molChanged : function () {
