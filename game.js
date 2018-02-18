@@ -53,8 +53,11 @@ IUPACman.prototype = {
 		this.pacman.lx = lx;
 		this.pacman.anchor.set(0.5);
 		this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
-		this.pacman.lx = this.pacman.x / xFactor; // logical x, not scaled
 
+		// Position of pacman after he finishes moving
+		this.finalX = this.pacman.lx;
+		this.finalY = this.pacman.y;
+		
 		this.pacman.play('munch');
 
 		this.eating = game.add.audio('eating');
@@ -121,20 +124,24 @@ IUPACman.prototype = {
 	},
 
 	invalidMove: function (dx, dy) {
-		if (this.outside(this.pacman.x + dx * bondLength * xFactor, this.pacman.y + dy * bondLength))
+		const destLX = this.finalX + dx * bondLength;
+		const destX = destLX * xFactor;
+		const destY = this.finalY + dy * bondLength;
+		
+		if (this.outside(destX, destY))
 			return true;
 
-		const currentBond = getExistingBond(this.pacman.lx, this.pacman.y, dx * bondLength, dy * bondLength);
+		const currentBond = getExistingBond(this.finalX, this.finalY, dx * bondLength, dy * bondLength);
 		let valenceChange = this.bondType;
 		if (currentBond)
 			valenceChange -= currentBond.type;
 		
-		const source = getAtom(this.pacman.lx, this.pacman.y);
+		const source = getAtom(this.finalX, this.finalY);
 
 		if (getHydrogenCount(source) < valenceChange)
 			return true;
 
-		const dest = getAtom(this.pacman.lx + dx * bondLength, this.pacman.y + dy * bondLength);
+		const dest = getAtom(destLX, destY);
 		
 		if (getHydrogenCount(dest) < valenceChange)
 			return true;
@@ -198,7 +205,7 @@ IUPACman.prototype = {
 		if (this.movesLeft > 0)
 			return;
 
-		if (this.nextMoveX === 0 && this.nextMoveY === 0)
+		if (! (this.nextMoveX || this.nextMoveY))
 			return;
 
 		this.eating.play();
@@ -206,9 +213,11 @@ IUPACman.prototype = {
 		this.moveX = this.nextMoveX;
 		this.moveY = this.nextMoveY;
 		this.pacman.angle = this.nextAngle;
+		this.finalX = this.pacman.lx + this.moveX * bondLength;
+		this.finalY = this.pacman.y + this.moveY * bondLength;
 		
 		this.movesLeft = bondLength;
-		this.nextMoveX = this.nextMoveY = 0;
+		this.nextMoveX = this.nextMoveY = null;
 
 		this.addBond();
 	},
