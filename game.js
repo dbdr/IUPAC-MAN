@@ -90,7 +90,13 @@ IUPACman.prototype = {
 			game.sound.mute = ! game.sound.mute;
 		});
 
+		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+
+		game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(() => {
+			if (controlKey.isDown)
+				this.clearCanvas();
+		});
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
 		game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
@@ -134,6 +140,29 @@ IUPACman.prototype = {
 		});
 	},
 
+	teleportPacman : function(x, y) {
+		this.pacman.lx = Math.round(x / xFactor);
+		this.pacman.x = x;
+		this.pacman.y = y;
+		this.finalX = this.pacman.lx;
+		this.finalY = y;
+		this.pacman.angle = 0;
+	},
+	
+	clearCanvas : function() {
+		this.teleportPacman(game.width / 2, game.height / 2);
+		for (let a in atoms)
+			if (atoms[a].symbolText)
+				atoms[a].symbolText.destroy();
+		for (let b in bonds)
+			if (bonds[b].sprite)
+				bonds[b].sprite.destroy();
+		clearMolecule();
+		console.log('Molecule cleared');
+		this.iupacName.setText('');
+		this.molChanged();
+	},
+	
 	invalidMove: function (dx, dy) {
 		const destLX = this.finalX + dx * bondLength;
 		const destX = destLX * xFactor;

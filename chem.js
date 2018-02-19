@@ -2,8 +2,16 @@
 
 'use strict';
 
-let atoms = {};
-let bonds = {};
+let atoms;
+let bonds;
+
+function clearMolecule() {
+	atoms = {};
+	bonds = {};
+}
+
+// Always start with an empty molecule
+clearMolecule();
 
 let id = 0;
 
