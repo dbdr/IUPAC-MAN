@@ -96,6 +96,10 @@ function getIUPACName() {
 	return computeName(getMolecule());
 }
 
+function getMolecularFormula() {
+	return computeFormula(getMolecule());
+}
+
 function getMolecule() {
 	let atomIDs = '';
 	let elementTypes = '';

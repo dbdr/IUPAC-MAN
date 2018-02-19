@@ -72,6 +72,7 @@ IUPACman.prototype = {
 		this.sound.setDecodedCallback([ this.eating, this.opening_song ], this.start, this);
 
 		this.iupacName = game.add.text(0, game.height - 50, "", {fontSize: 12, fill: '#FFF'});
+		this.molecularFormula = game.add.text(0, game.height - 25, "", {fontSize: 12, fill: '#FFF'});
 		
 		// Pause
 		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
@@ -160,6 +161,7 @@ IUPACman.prototype = {
 		clearMolecule();
 		console.log('Molecule cleared');
 		this.iupacName.setText('');
+		this.molecularFormula.setText('');
 		this.molChanged();
 	},
 	
@@ -323,6 +325,13 @@ IUPACman.prototype = {
 				name = '';
 			}
 			this.iupacName.setText(name);
+		});
+		getMolecularFormula().then((formula) => {
+			if (formula.includes('errorCode')) {
+				console.log(formula);
+				formula = '';
+			}
+			this.molecularFormula.setText(formula);
 		});
 	},
 	
