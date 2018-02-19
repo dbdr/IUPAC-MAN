@@ -1,6 +1,6 @@
 [
-	{ "description": "Draw \"ethane\"", "name": "ethane", "hint": "Press the letter W" },
-	{ "description": "Draw C7H8", "formula": "C7H8" },
+	{ "name": "ethane", "hint": "Press the letter W" },
+	{ "formula": "C7H8" },
 	{ "description": "Lowest pKa", "calculation": "pKa" },
 	{ "name": "cyclohexane" },
 	{ "name": "cyclopentane", "hint": "Press Shift-A" },

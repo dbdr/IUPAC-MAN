@@ -5,6 +5,15 @@ fetch('levels.json')
 	.then((json) => tasks = json);
 
 function getNextTaskText() {
-	console.log(tasks);
-	return tasks.shift().description;
+	const next = tasks.shift();
+	if (! next)
+		return '';
+	if (next.description)
+		return next.description;
+	else if (next.name)
+		return 'Draw "' + next.name + '"';
+	else if (next.formula)
+		return 'Draw ' + next.formula;
+	else
+		return '';
 }
