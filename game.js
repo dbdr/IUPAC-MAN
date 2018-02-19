@@ -148,12 +148,20 @@ IUPACman.prototype = {
 		// For intro
 		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
 			game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
-			this.movesLeft = Math.round((game.width - this.pacman.x) / xFactor / 2);
-			this.moveX = 1;
-			this.moveY = 0;
-			this.finalX = this.pacman.lx + this.movesLeft;
-			this.finalY = this.pacman.y;
-			this.opening_song.play();
+			this.introText = game.add.text(game.width / 2, game.height / 2, 'ChemAxon presents', {fontSize: 16, fill: '#FFF'});
+			this.introText.anchor.set(0.5);
+			setTimeout(() => {
+				this.introText.setText('');
+				setTimeout(() => {
+					this.introText.setText('IUPAC-MAN');
+					this.movesLeft = Math.round((game.width - this.pacman.x) / xFactor / 2);
+					this.moveX = 1;
+					this.moveY = 0;
+					this.finalX = this.pacman.lx + this.movesLeft;
+					this.finalY = this.pacman.y;
+					this.opening_song.play();
+				}, 1000);
+			}, 3000);
 		});
 	},
 
@@ -322,6 +330,14 @@ IUPACman.prototype = {
 	},
 	
 	continueMove : function () {
+		if (this.introText && (this.introText.x - this.pacman.x < 200 || this.cxnLogo.visible)) {
+			this.introText.x++;
+			if (this.introText.x - this.introText.width / 2 > game.width) {
+				this.introText.destroy();
+				this.introText = null;
+			}
+		}
+		
 		if (this.movesLeft <= 0)
 			return;
 
