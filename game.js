@@ -99,6 +99,11 @@ IUPACman.prototype = {
 				this.clearCanvas();
 		});
 
+		this.score = 0;
+		this.scoreText = game.add.text(game.width, 100, '0', {fontSize: 20, fill: '#FFF'});
+		this.scoreText.anchor.set(1, 0);
+		this.scoreText.visible = false;
+
 		this.taskText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
 		this.taskText.anchor.set(1, 0);
 		this.hintText = game.add.text(game.width, 40, '', {fontSize: 12, fill: '#FFF'});
@@ -107,6 +112,7 @@ IUPACman.prototype = {
 		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
 			this.taskText.setText(getNextTaskText());
 			this.hintText.setText('Press H for hint');
+			this.scoreText.visible = true;
 		});
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
@@ -310,6 +316,9 @@ IUPACman.prototype = {
 		bond.sprite = bondGraphics;
 		
 		this.bondType = 1;
+
+		this.score += Math.round(Math.random() * 100) * 100;
+		this.scoreText.setText(this.score);
 	},
 	
 	continueMove : function () {
