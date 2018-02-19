@@ -98,6 +98,16 @@ IUPACman.prototype = {
 			if (controlKey.isDown)
 				this.clearCanvas();
 		});
+
+		this.taskText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
+		this.taskText.anchor.set(1, 0);
+		this.hintText = game.add.text(game.width, 40, '', {fontSize: 12, fill: '#FFF'});
+		this.hintText.anchor.set(1, 0);
+		
+		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
+			this.taskText.setText(getNextTaskText());
+			this.hintText.setText('Press H for hint');
+		});
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
 		game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });

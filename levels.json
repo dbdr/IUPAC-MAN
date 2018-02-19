@@ -1,0 +1,13 @@
+[
+	{ "description": "Draw \"ethane\"", "name": "ethane", "hint": "Press the letter W" },
+	{ "description": "Draw C7H8", "formula": "C7H8" },
+	{ "description": "Lowest pKa", "calculation": "pKa" },
+	{ "name": "cyclohexane" },
+	{ "name": "cyclopentane", "hint": "Press Shift-A" },
+	{ "name": "prop-1-ene" },
+	{ "formula": "C6H6" },
+	{ "formula": "C7H8" },
+	{ "formula": "C6" },
+	{ "name": "acetic acid" },
+	{ "name": "bicyclo[3.3.1]heptane", "hint": [ "try the Shift key" ] }
+]
