@@ -34,6 +34,7 @@ IUPACman.prototype = {
 		this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
 		this.load.image('cxn-logo', 'assets/cxn-logo-32.png');
 
+		this.load.audio('die', 'assets/sounds/die.ogg');
 		this.load.audio('eating', 'assets/sounds/eating.ogg');
 		this.load.audio('eatpill', 'assets/sounds/eatpill.ogg');
 		this.load.audio('opening_song', 'assets/sounds/opening_song.ogg');
@@ -62,6 +63,7 @@ IUPACman.prototype = {
 		
 		this.pacman.play('munch');
 
+		this.die = game.add.audio('die');
 		this.eating = game.add.audio('eating');
 		this.eatpill = game.add.audio('eatpill');
 		this.opening_song = game.add.audio('opening_song');
@@ -91,6 +93,11 @@ IUPACman.prototype = {
 			game.sound.mute = ! game.sound.mute;
 		});
 
+		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
+			this.die.play();
+			this.die.onStop.add(() => game.world.visible = false);
+		});
+		
 		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
