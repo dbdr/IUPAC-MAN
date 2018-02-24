@@ -98,6 +98,15 @@ IUPACman.prototype = {
 			this.die.onStop.add(() => game.world.visible = false);
 		});
 		
+		// Fullscreen
+		game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(() => {
+			if (game.scale.isFullScreen)
+				game.scale.stopFullScreen();
+			else
+				game.scale.startFullScreen(false);
+		});
+	
 		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
