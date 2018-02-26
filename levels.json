@@ -9,5 +9,5 @@
 	{ "formula": "C7H8" },
 	{ "formula": "C6" },
 	{ "name": "acetic acid" },
-	{ "name": "bicyclo[3.3.1]heptane", "hint": [ "try the Shift key" ] }
+	{ "name": "bicyclo[3.1.1]heptane", "hint": [ "try the Shift key" ] }
 ]

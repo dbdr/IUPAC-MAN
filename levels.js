@@ -1,19 +1,21 @@
-let tasks;
+let challenges;
 
 fetch('levels.json')
 	.then((res) => res.json())
-	.then((json) => tasks = json);
+	.then((json) => challenges = json);
 
-function getNextTaskText() {
-	const next = tasks.shift();
-	if (! next)
+let currentChallenge;
+
+function getNextChallengeText() {
+	currentChallenge = challenges.shift();
+	if (! currentChallenge)
 		return '';
-	if (next.description)
-		return next.description;
-	else if (next.name)
-		return 'Draw "' + next.name + '"';
-	else if (next.formula)
-		return 'Draw ' + next.formula;
+	if (currentChallenge.description)
+		return currentChallenge.description;
+	else if (currentChallenge.name)
+		return 'Draw "' + currentChallenge.name + '"';
+	else if (currentChallenge.formula)
+		return 'Draw ' + currentChallenge.formula;
 	else
 		return '';
 }

@@ -23,6 +23,7 @@ IUPACman.prototype = {
 		this.load.audio('die', 'assets/sounds/die.ogg');
 		this.load.audio('eating', 'assets/sounds/eating.ogg');
 		this.load.audio('eatpill', 'assets/sounds/eatpill.ogg');
+		this.load.audio('intermission', 'assets/sounds/intermission.ogg');
 
 	},
 
@@ -36,6 +37,7 @@ IUPACman.prototype = {
 		this.die = game.add.audio('die');
 		this.eating = game.add.audio('eating');
 		this.eatpill = game.add.audio('eatpill');
+		this.intermission = game.add.audio('intermission');
 
 		this.iupacName = game.add.text(0, game.height - 50, "", {fontSize: 12, fill: '#FFF'});
 		this.molecularFormula = game.add.text(0, game.height - 25, "", {fontSize: 12, fill: '#FFF'});
@@ -84,13 +86,13 @@ IUPACman.prototype = {
 		this.scoreText.anchor.set(1, 0);
 		this.scoreText.visible = false;
 
-		this.taskText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
-		this.taskText.anchor.set(1, 0);
+		this.challengeText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
+		this.challengeText.anchor.set(1, 0);
 		this.hintText = game.add.text(game.width, 40, '', {fontSize: 12, fill: '#FFF'});
 		this.hintText.anchor.set(1, 0);
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
-			this.taskText.setText(getNextTaskText());
+			this.challengeText.setText(getNextChallengeText());
 			this.hintText.setText('Press H for hint');
 			this.scoreText.visible = true;
 		});
@@ -283,8 +285,6 @@ IUPACman.prototype = {
 		
 		this.bondType = 1;
 
-		this.score += Math.round(Math.random() * 100) * 100;
-		this.scoreText.setText(this.score);
 	},
 	
 	molChanged : function () {
@@ -294,6 +294,9 @@ IUPACman.prototype = {
 				name = '';
 			}
 			this.iupacName.setText(name);
+
+			if (currentChallenge && name === currentChallenge.name)
+				this.challengeSolved();
 		});
 		getMolecularFormula().then((formula) => {
 			if (formula.includes('errorCode')) {
@@ -301,13 +304,38 @@ IUPACman.prototype = {
 				formula = '';
 			}
 			this.molecularFormula.setText(formula);
+
+			if (currentChallenge && formula === currentChallenge.formula)
+				this.challengeSolved();
 		});
+	},
+
+	challengeSolved : function () {
+		this.pointsWon = 2000;
+
+		this.intermission.play();
+	},
+
+	updateScore : function () {
+		if (! this.pointsWon || this.pointsWon <= 0)
+			return;
+
+		const points = 10;
+		this.pointsWon -= points;
+		this.score += points;
+		this.scoreText.setText(this.score);
+
+		if (this.pointsWon <= 0) {
+			// Finished adding the points
+			this.challengeText.setText(getNextChallengeText());
+		}
 	},
 	
 	update: function () {
 
 		this.applyAtom();
 		this.startMove();
+		this.updateScore();
 
 	}
 };
