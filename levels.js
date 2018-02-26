@@ -19,3 +19,10 @@ function getNextChallengeText() {
 	else
 		return '';
 }
+
+function getNextHint() {
+	if (! currentChallenge)
+		return '';
+
+	return currentChallenge.hint;
+}

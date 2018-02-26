@@ -92,11 +92,14 @@ IUPACman.prototype = {
 		this.hintText.anchor.set(1, 0);
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
-			this.challengeText.setText(getNextChallengeText());
-			this.hintText.setText('Press H for hint');
+			this.nextChallenge();
 			this.scoreText.visible = true;
 		});
-		
+
+		game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(() => {
+			this.hintText.setText(getNextHint());
+		});
+
 		game.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(() => { this.keyMove( 0, -2, 270); });
 		game.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(() => { this.keyMove( 0, +2,  90); });
 
@@ -316,6 +319,12 @@ IUPACman.prototype = {
 		this.intermission.play();
 	},
 
+	nextChallenge : function () {
+		const text = getNextChallengeText();
+		this.challengeText.setText(text);
+		this.hintText.setText('Press H for hint');
+	},
+	
 	updateScore : function () {
 		if (! this.pointsWon || this.pointsWon <= 0)
 			return;
@@ -327,7 +336,7 @@ IUPACman.prototype = {
 
 		if (this.pointsWon <= 0) {
 			// Finished adding the points
-			this.challengeText.setText(getNextChallengeText());
+			this.nextChallenge();
 		}
 	},
 	
