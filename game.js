@@ -113,6 +113,8 @@ IUPACman.prototype = {
 		this.helpText.anchor.set(1, 0);
 		this.hintText = game.add.text(game.width, 60, '', {fontSize: 12, fill: '#FFF'});
 		this.hintText.anchor.set(1, 0);
+
+		reloadLevels();
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
 			this.nextChallenge();

@@ -1,8 +1,10 @@
 let challenges;
 
-fetch('levels.json')
-	.then((res) => res.json())
-	.then((json) => challenges = json);
+function reloadLevels() {
+	fetch('levels.json')
+		.then((res) => res.json())
+		.then((json) => challenges = json);
+}
 
 let currentChallenge;
 
