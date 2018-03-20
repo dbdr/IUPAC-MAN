@@ -104,6 +104,9 @@ IUPACman.prototype = {
 		this.totalScoreText.anchor.set(1, 0);
 		this.totalScoreText.visible = false;
 
+		this.usernameText = game.add.text(game.width, 180, username, {fontSize: 20, fill: '#FFF'});
+		this.usernameText.anchor.set(1, 0);
+
 		this.challengeText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
 		this.challengeText.anchor.set(1, 0);
 		this.hintText = game.add.text(game.width, 40, '', {fontSize: 12, fill: '#FFF'});
