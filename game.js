@@ -407,6 +407,7 @@ IUPACman.prototype = {
 			this.curScore = 2000;
 			this.designChallenge = false;
 		}
+		this.molChanged();
 	},
 	
 	updateScore : function () {
