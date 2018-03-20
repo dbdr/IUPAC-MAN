@@ -65,10 +65,11 @@ function getOrCreateBond(a1, a2, type) {
 	let res;
 	if (key in bonds) {
 		res = bonds[key];
-		res.type = type;
+		if (type !== 0)
+			res.type = type;
 	}
 	else {
-		res = { id: id++, a1: a1.id, a2: a2.id, type: type };
+		res = { id: id++, a1: a1.id, a2: a2.id, type: type === 0 ? 1 : type };
 		bonds[key] = res;
 	}
 	return res;

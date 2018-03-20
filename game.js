@@ -8,7 +8,7 @@ const doubleBondRatio = 14;
 const IUPACman = function (game) {
 	this.nextMoveX = 0;
 	this.nextMoveY = 0;
-	this.bondType = 1;
+	this.bondType = 0;
 };
 
 IUPACman.prototype = {
@@ -191,7 +191,10 @@ IUPACman.prototype = {
 			return true;
 
 		const currentBond = getExistingBond(this.finalX, this.finalY, dx * bondLength, dy * bondLength);
-		let valenceChange = this.bondType;
+		let bondType = this.bondType;
+		if (bondType === 0)
+			bondType = currentBond ? currentBond.type : 1;
+		let valenceChange = bondType;
 		if (currentBond)
 			valenceChange -= currentBond.type;
 		
@@ -283,6 +286,7 @@ IUPACman.prototype = {
 
 	addBond : function () {
 		const bond = getBond(pacman.lx, pacman.y, pacman.moveX * bondLength, pacman.moveY * bondLength, this.bondType);
+		this.bondType = bond.type;
 		this.molChanged();
 
 		if (bond.sprite)
@@ -316,7 +320,7 @@ IUPACman.prototype = {
 
 		bond.sprite = bondGraphics;
 		
-		this.bondType = 1;
+		this.bondType = 0;
 
 	},
 	
