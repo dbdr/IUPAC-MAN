@@ -109,10 +109,12 @@ IUPACman.prototype = {
 
 		this.challengeText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
 		this.challengeText.anchor.set(1, 0);
-		this.hintText = game.add.text(game.width, 40, '', {fontSize: 12, fill: '#FFF'});
+		this.helpText = game.add.text(game.width, 40, 'Press ENTER to start game', {fontSize: 12, fill: '#FFF'});
+		this.helpText.anchor.set(1, 0);
+		this.hintText = game.add.text(game.width, 60, '', {fontSize: 12, fill: '#FFF'});
 		this.hintText.anchor.set(1, 0);
 		
-		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
+		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
 			this.nextChallenge();
 			this.curScoreText.visible = true;
 			this.totalScoreText.visible = true;
@@ -389,7 +391,8 @@ IUPACman.prototype = {
 		
 		const text = getNextChallengeText();
 		this.challengeText.setText(text);
-		this.hintText.setText('Press H for hint');
+		this.helpText.setText('Press H for hints, ENTER to skip, ESC to quit');
+		this.hintText.setText('');
 		if (currentChallenge.calculation === "solubility") {
 			this.curScore = 0;
 			this.acceptorCount.visible = true;
