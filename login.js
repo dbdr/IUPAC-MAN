@@ -33,12 +33,15 @@ Login.prototype = {
 		nameInput.x -= nameInput.width / 2;
 		nameInput.startFocus();
 
-		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
+		const exitState = () => {
 			username = nameInput.text.text;
 			nameText.visible = false;
 			nameInput.visible = false;
 			game.state.start('Game', false);
-		});
+		};
+		
+		nameInput.focusOut.add(exitState);
+		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(exitState);
 
 	},
 
