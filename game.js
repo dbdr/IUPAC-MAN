@@ -18,6 +18,7 @@ IUPACman.prototype = {
 			game.load.script('chem', 'chem.js');
 			game.load.script('levels', 'levels.js');
 			game.load.script('webservice', 'webservice.js');
+			game.load.script('highscores');
 		}
 		
 		this.load.audio('die', 'assets/sounds/die.ogg');
@@ -61,7 +62,7 @@ IUPACman.prototype = {
 
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
 			this.die.play();
-			this.die.onStop.add(() => game.state.start('Splash', true));
+			this.die.onStop.add(() => game.state.start('Highscores', true));
 		});
 		
 		// Fullscreen
@@ -341,6 +342,7 @@ IUPACman.prototype = {
 			
 			if (this.pointsWon <= 0) {
 				// Finished adding the points
+				addScore(username, this.totalScore);
 				this.nextChallenge();
 			}
 		}

@@ -8,10 +8,6 @@ let username = '???';
 
 Login.prototype = {
 
-	loadScript: function (scriptName) {
-		game.load.script(scriptName);
-	},
-
 	preload: function () {
 		game.add.plugin(PhaserInput.Plugin);
 	},
