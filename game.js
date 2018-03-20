@@ -81,10 +81,15 @@ IUPACman.prototype = {
 				this.clearCanvas();
 		});
 
-		this.score = 0;
-		this.scoreText = game.add.text(game.width, 100, '0', {fontSize: 20, fill: '#FFF'});
-		this.scoreText.anchor.set(1, 0);
-		this.scoreText.visible = false;
+		this.curScore = 0;
+		this.curScoreText = game.add.text(game.width, 100, '0', {fontSize: 20, fill: '#FFF'});
+		this.curScoreText.anchor.set(1, 0);
+		this.curScoreText.visible = false;
+
+		this.totalScore = 0;
+		this.totalScoreText = game.add.text(game.width, 140, '0', {fontSize: 20, fill: '#FFF'});
+		this.totalScoreText.anchor.set(1, 0);
+		this.totalScoreText.visible = false;
 
 		this.challengeText = game.add.text(game.width, 20, '', {fontSize: 12, fill: '#FFF'});
 		this.challengeText.anchor.set(1, 0);
@@ -93,7 +98,8 @@ IUPACman.prototype = {
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(() => {
 			this.nextChallenge();
-			this.scoreText.visible = true;
+			this.curScoreText.visible = true;
+			this.totalScoreText.visible = true;
 		});
 
 		game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(() => {
@@ -314,7 +320,7 @@ IUPACman.prototype = {
 	},
 
 	challengeSolved : function () {
-		this.pointsWon = 2000;
+		this.pointsWon = this.curScore;
 
 		this.intermission.play();
 	},
@@ -323,21 +329,27 @@ IUPACman.prototype = {
 		const text = getNextChallengeText();
 		this.challengeText.setText(text);
 		this.hintText.setText('Press H for hint');
+		this.curScore = 2000;
 	},
 	
 	updateScore : function () {
-		if (! this.pointsWon || this.pointsWon <= 0)
-			return;
-
-		const points = 10;
-		this.pointsWon -= points;
-		this.score += points;
-		this.scoreText.setText(this.score);
-
-		if (this.pointsWon <= 0) {
-			// Finished adding the points
-			this.nextChallenge();
+		if (this.pointsWon && this.pointsWon > 0) {
+			const points = Math.min(10, this.pointsWon);
+			this.pointsWon -= points;
+			this.curScore -= points;
+			this.totalScore += points;
+			
+			if (this.pointsWon <= 0) {
+				// Finished adding the points
+				this.nextChallenge();
+			}
 		}
+		else {
+			this.curScore = 1000 + 0.9998 * (this.curScore - 1000);
+		}
+
+		this.curScoreText.setText(Math.round(this.curScore / 10) * 10);
+		this.totalScoreText.setText(Math.round(this.totalScore / 10) * 10);
 	},
 	
 	update: function () {
