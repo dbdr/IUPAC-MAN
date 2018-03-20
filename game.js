@@ -40,7 +40,8 @@ IUPACman.prototype = {
 		this.eatpill = game.add.audio('eatpill');
 		this.intermission = game.add.audio('intermission');
 
-		this.solubility = game.add.text(0, game.height - 175, "", {fontSize: 12, fill: '#FFF'});
+		this.solubility = game.add.text(0, game.height - 200, "", {fontSize: 12, fill: '#FFF'});
+		this.atomCount = game.add.text(0, game.height - 175, "", {fontSize: 12, fill: '#FFF'});
 		this.logP = game.add.text(0, game.height - 150, "", {fontSize: 12, fill: '#FFF'});
 		this.donorCount = game.add.text(0, game.height - 125, "", {fontSize: 12, fill: '#FFF'});
 		this.acceptorCount = game.add.text(0, game.height - 105, "", {fontSize: 12, fill: '#FFF'});
@@ -52,6 +53,7 @@ IUPACman.prototype = {
 		this.donorCount.visible = false;
 		this.logP.visible = false;
 		this.solubility.visible = false;
+		this.atomCount.visible = false;
 		
 		// Pause
 		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
@@ -171,6 +173,7 @@ IUPACman.prototype = {
 		this.acceptorCount.setText('');
 		this.logP.setText('');
 		this.solubility.setText('');
+		this.atomCount.setText('');
 		this.molChanged();
 	},
 	
@@ -337,14 +340,16 @@ IUPACman.prototype = {
 			const aCount = properties.hbda.acceptorAtomCount;
 			const dCount = properties.hbda.donorAtomCount;
 			const logP = properties.logp;
-			const solubility = properties.solubility.intrinsicSolubility;
+			const solubility = properties.solubility.pHDependentSolubility.values.find(s => s.pH === 7.4).solubility;
+			const atomCount = Object.keys(atoms).length;
 			
 			this.molecularFormula.setText(formula);
 			this.molecularMass.setText("Mass: " + mass);
 			this.acceptorCount.setText("Acceptor count: " + aCount);
 			this.donorCount.setText("Donor count: " + dCount);
 			this.logP.setText("logP: " + logP.toFixed(2));
-			this.solubility.setText("Solubility: " + solubility.toFixed(2));
+	 		this.solubility.setText("Solubility: " + solubility.toFixed(2));
+	 		this.atomCount.setText("Atom count " + atomCount);
 
 			if (currentChallenge && formula === currentChallenge.formula)
 				this.challengeSolved();
@@ -356,8 +361,9 @@ IUPACman.prototype = {
 				this.donorCount.fill = dCount <= 5 ? green : red;
 				this.acceptorCount.fill = aCount <= 10 ? green : red;
 				this.logP.fill = logP <= 5 ? green : red;
+				this.atomCount.fill = atomCount >= 10 ? green : red;
 
-				if (mass <= 500 && dCount <= 5 && aCount <= 10 && logP <= 5) {
+				if (mass <= 500 && dCount <= 5 && aCount <= 10 && logP <= 5 && atomCount >= 10) {
 					this.curScore = Math.max(this.curScore, solubility * 1000);
 					this.pointsWon = this.baseScore + this.curScore - this.totalScore;
 				}
@@ -387,6 +393,7 @@ IUPACman.prototype = {
 			this.donorCount.visible = true;
 			this.logP.visible = true;
 			this.solubility.visible = true;
+			this.atomCount.visible = true;
 			this.designChallenge = true;
 			this.baseScore = this.totalScore;
 		}

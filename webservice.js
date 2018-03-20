@@ -36,6 +36,16 @@ function computeProperties(mol) {
 				additionalFields: {
 					logp: "chemicalTerms(logp)"
 				},
+				parameters: {
+					hbda: {
+						pHLower: 7.4,
+						pHUpper: 7.5,
+						pHStep: 0.1,
+						excludeSulfur: true,
+						excludeHalogens: true,
+						displayMajorMicrospecies: false
+					}
+				}
 			}
 		})
 	})
