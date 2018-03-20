@@ -2,7 +2,7 @@
 
 'use strict';
 
-const game = new Phaser.Game(480, 300),
+const game = new Phaser.Game(600, 400),
 	  Main = function () {};
 
 Main.prototype = {
