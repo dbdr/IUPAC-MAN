@@ -16,7 +16,8 @@ Splash.prototype = {
 		this.load.spritesheet('pacman', 'assets/pacman.png', 32, 32);
 
 		this.load.image('cxn-logo', 'assets/cxn-logo-32.png');
-
+		this.load.image('iupac-man-title', 'assets/iupac-man-title.png');
+		
 		if (typeof pacman === 'undefined') {
 			this.loadScript('pacman');
 			this.loadScript('game');
@@ -44,7 +45,8 @@ Splash.prototype = {
 			setTimeout(() => {
 				this.introText.setText('');
 				setTimeout(() => {
-					this.introText.setText('IUPAC-MAN');
+					this.iupacManTitle = game.add.sprite(game.width / 2, game.height / 2, 'iupac-man-title');
+					this.iupacManTitle.anchor.set(0.5);
 					pacman.movesLeft = Math.round((game.width - pacman.x) / xFactor / 2);
 					pacman.moveX = 1;
 					pacman.moveY = 0;
@@ -66,11 +68,11 @@ Splash.prototype = {
 
 	update: function () {
 
-		if (this.introText && (this.introText.x - pacman.x < 200 || pacman.movesLeft === 0)) {
-			this.introText.x++;
-			if (this.introText.x - this.introText.width / 2 > game.width) {
-				this.introText.destroy();
-				this.introText = null;
+		if (this.iupacManTitle && (this.iupacManTitle.x - this.iupacManTitle.width / 2 - pacman.x < 100 || pacman.movesLeft === 0)) {
+			this.iupacManTitle.x += 2;
+			if (this.iupacManTitle.x - this.iupacManTitle.width / 2 > game.width) {
+				this.iupacManTitle.destroy();
+				this.iupacManTitle = null;
 				// Only show after intro
 				this.cxnLogo.visible = true;
 				this.copyrightText.visible = true;
