@@ -2,7 +2,13 @@
 
 'use strict';
 
-const highscores = [];
+let highscores = window.localStorage.getItem('highscores');
+if (highscores)
+	highscores = JSON.parse(highscores);
+else
+	highscores = [];
+
+console.log("Loaded highscores:", highscores);
 
 function addScore(username, score) {
 	console.log("Score", username, score);
@@ -15,6 +21,7 @@ function addScore(username, score) {
 
 	highscores.sort((h1,h2) => h2.score - h1.score);
 	console.log(highscores);
+	window.localStorage.setItem('highscores', JSON.stringify(highscores));
 }
 	
 const Highscores = function () {};
