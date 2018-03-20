@@ -93,7 +93,10 @@ IUPACman.prototype = {
 			if (controlKey.isDown)
 				this.clearCanvas();
 		});
-
+		game.input.keyboard.addKey(Phaser.Keyboard.BACKSPACE).onDown.add(() => {
+			this.clearCanvas();
+		});
+		
 		this.curScore = 0;
 		this.curScoreText = game.add.text(game.width, 100, '0', {fontSize: 20, fill: '#FFF'});
 		this.curScoreText.anchor.set(1, 0);
@@ -397,7 +400,7 @@ IUPACman.prototype = {
 		
 		const text = getNextChallengeText();
 		this.challengeText.setText(text);
-		this.helpText.setText('Press H for hints, ENTER to skip, ESC to quit');
+		this.helpText.setText('Press H for hints, ENTER to skip, BACKSPACE to clear, ESC to quit');
 		this.hintText.setText('');
 		if (currentChallenge.calculation === "solubility") {
 			this.curScore = 0;

@@ -1,6 +1,6 @@
 [
 	{ "name": "ethane", "hint": "Press the letter W" },
-	{ "name": "cyclohexane", "hint": "Try other keys around W or Control-X to clear" },
+	{ "name": "cyclohexane", "hint": "Try other keys around W or BACKSPACE to clear" },
 	{ "name": "prop-1-ene", "hint": "Press '2' then move for a double bond" },
 	{ "formula": "C6H6" },
 	{ "formula": "C6", "hint": "Stop thinking like a chemist" },
