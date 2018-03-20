@@ -20,7 +20,7 @@ function computeName(mol) {
 		.catch(error => console.error('Error computing name:', error));
 }
 
-function computeFormula(mol) {
+function computeProperties(mol) {
 	return fetch(webservice + 'util/detail', {
 		method: 'POST',
 		headers: {
@@ -32,15 +32,18 @@ function computeFormula(mol) {
 				{ structure: mol }
 			],
 			display: {
-				include: ["elementalAnalysis"]
+				include: [ "elementalAnalysis", "hbda", "solubility" ],
+				additionalFields: {
+					logp: "chemicalTerms(logp)"
+				},
 			}
 		})
 	})
 		.then(res => res.json())
-		.then(json => json.data[0].elementalAnalysis.formula)
-		.catch(error => console.error('Error computing formula:', error));
+		.then(json => json.data[0])
+		.catch(error => console.error('Error computing properties:', error));
 }
 
 // Warm-up
 computeName('C').then((name) => console.log('IUPAC name of CH4:', name));
-computeFormula('c1ccccc1').then((formula) => console.log('Formula of benzene:', formula));
+computeProperties('c1ccccc1').then(properties => console.log('Properties of benzene:', properties));

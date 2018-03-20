@@ -40,8 +40,18 @@ IUPACman.prototype = {
 		this.eatpill = game.add.audio('eatpill');
 		this.intermission = game.add.audio('intermission');
 
+		this.solubility = game.add.text(0, game.height - 175, "", {fontSize: 12, fill: '#FFF'});
+		this.logP = game.add.text(0, game.height - 150, "", {fontSize: 12, fill: '#FFF'});
+		this.donorCount = game.add.text(0, game.height - 125, "", {fontSize: 12, fill: '#FFF'});
+		this.acceptorCount = game.add.text(0, game.height - 105, "", {fontSize: 12, fill: '#FFF'});
+		this.molecularMass = game.add.text(0, game.height - 75, "", {fontSize: 12, fill: '#FFF'});
 		this.iupacName = game.add.text(0, game.height - 50, "", {fontSize: 12, fill: '#FFF'});
 		this.molecularFormula = game.add.text(0, game.height - 25, "", {fontSize: 12, fill: '#FFF'});
+
+		this.acceptorCount.visible = false;
+		this.donorCount.visible = false;
+		this.logP.visible = false;
+		this.solubility.visible = false;
 		
 		// Pause
 		game.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(() => {
@@ -156,6 +166,11 @@ IUPACman.prototype = {
 		console.log('Molecule cleared');
 		this.iupacName.setText('');
 		this.molecularFormula.setText('');
+		this.molecularMass.setText('');
+		this.donorCount.setText('');
+		this.acceptorCount.setText('');
+		this.logP.setText('');
+		this.solubility.setText('');
 		this.molChanged();
 	},
 	
@@ -298,6 +313,9 @@ IUPACman.prototype = {
 	},
 	
 	molChanged : function () {
+		if (Object.keys(atoms).length === 0)
+			return;
+		
 		getIUPACName().then((name) => {
 			if (name.includes('errorCode')) {
 				console.log(name);
@@ -308,15 +326,45 @@ IUPACman.prototype = {
 			if (currentChallenge && name === currentChallenge.name)
 				this.challengeSolved();
 		});
-		getMolecularFormula().then((formula) => {
-			if (formula.includes('errorCode')) {
-				console.log(formula);
-				formula = '';
+		getMolecularProperties().then((properties) => {
+			console.log(properties);
+			if (typeof properties === "string" && properties.includes('errorCode')) {
+				console.log(properties);
+				properties = { formula: '', mass: ''};
 			}
+			const formula = properties.elementalAnalysis.formula;
+			const mass = properties.elementalAnalysis.mass;
+			const aCount = properties.hbda.acceptorAtomCount;
+			const dCount = properties.hbda.donorAtomCount;
+			const logP = properties.logp;
+			const solubility = properties.solubility.intrinsicSolubility;
+			
 			this.molecularFormula.setText(formula);
+			this.molecularMass.setText("Mass: " + mass);
+			this.acceptorCount.setText("Acceptor count: " + aCount);
+			this.donorCount.setText("Donor count: " + dCount);
+			this.logP.setText("logP: " + logP.toFixed(2));
+			this.solubility.setText("Solubility: " + solubility.toFixed(2));
 
 			if (currentChallenge && formula === currentChallenge.formula)
 				this.challengeSolved();
+			
+			if (this.designChallenge) {
+				const green = '#0F0';
+				const red = '#F00';
+				this.molecularMass.fill = mass <= 500 ? green : red;
+				this.donorCount.fill = dCount <= 5 ? green : red;
+				this.acceptorCount.fill = aCount <= 10 ? green : red;
+				this.logP.fill = logP <= 5 ? green : red;
+
+				if (mass <= 500 && dCount <= 5 && aCount <= 10 && logP <= 5) {
+					this.curScore = Math.max(this.curScore, solubility * 1000);
+					this.pointsWon = this.baseScore + this.curScore - this.totalScore;
+				}
+				else {
+					this.curScore = 0;
+				}
+			}
 		});
 	},
 
@@ -327,27 +375,45 @@ IUPACman.prototype = {
 	},
 
 	nextChallenge : function () {
+		if (this.designChallenge)
+			return;
+		
 		const text = getNextChallengeText();
 		this.challengeText.setText(text);
 		this.hintText.setText('Press H for hint');
-		this.curScore = 2000;
+		if (currentChallenge.calculation === "solubility") {
+			this.curScore = 0;
+			this.acceptorCount.visible = true;
+			this.donorCount.visible = true;
+			this.logP.visible = true;
+			this.solubility.visible = true;
+			this.designChallenge = true;
+			this.baseScore = this.totalScore;
+		}
+		else {
+			this.curScore = 2000;
+			this.designChallenge = false;
+		}
 	},
 	
 	updateScore : function () {
 		if (this.pointsWon && this.pointsWon > 0) {
 			const points = Math.min(10, this.pointsWon);
 			this.pointsWon -= points;
-			this.curScore -= points;
+			if (! this.designChallenge)
+				this.curScore -= points;
 			this.totalScore += points;
 			
 			if (this.pointsWon <= 0) {
 				// Finished adding the points
 				addScore(username, this.totalScore);
-				this.nextChallenge();
+				if (! this.designChallenge)
+					this.nextChallenge();
 			}
 		}
 		else {
-			this.curScore = 1000 + 0.9998 * (this.curScore - 1000);
+			if (! this.designChallenge)
+				this.curScore = 1000 + 0.9998 * (this.curScore - 1000);
 		}
 
 		this.curScoreText.setText(Math.round(this.curScore / 10) * 10);

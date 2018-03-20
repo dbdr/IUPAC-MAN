@@ -9,5 +9,5 @@
 	{ "name": "acetic acid", "hint": "Press O or N for heteroatoms" },
 	{ "name": "cyclopentane", "hint": "Try Shift-A" },
 	{ "name": "bicyclo[3.1.1]heptane", "maybe hint": "try the Shift key if we change the controls..." },
-	{ "description": "Lowest pKa", "calculation": "pKa" }
+	{ "description": "Maximize solubility", "calculation": "solubility" }
 ]

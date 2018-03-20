@@ -96,8 +96,8 @@ function getIUPACName() {
 	return computeName(getMolecule());
 }
 
-function getMolecularFormula() {
-	return computeFormula(getMolecule());
+function getMolecularProperties() {
+	return computeProperties(getMolecule());
 }
 
 function getMolecule() {
