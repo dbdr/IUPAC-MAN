@@ -20,6 +20,7 @@ Splash.prototype = {
 		
 		if (typeof pacman === 'undefined') {
 			this.loadScript('pacman');
+			this.loadScript('login');
 			this.loadScript('game');
 		}
 	},
@@ -40,7 +41,7 @@ Splash.prototype = {
 		// For intro
 		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
 			game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
-			this.introText = game.add.text(game.width / 2, game.height / 2, 'ChemAxon presents', {fontSize: 16, fill: '#FFF'});
+			this.introText = game.add.text(game.width / 2, game.height / 2, 'CHEMAXON PRESENTS', {fontSize: 16, fill: '#FFF'});
 			this.introText.anchor.set(0.5);
 			setTimeout(() => {
 				this.introText.setText('');
@@ -76,7 +77,7 @@ Splash.prototype = {
 				// Only show after intro
 				this.cxnLogo.visible = true;
 				this.copyrightText.visible = true;
-				game.state.start('Game', false);
+				game.state.start('Login', false);
 			}
 		}
 
