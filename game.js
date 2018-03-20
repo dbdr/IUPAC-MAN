@@ -338,7 +338,7 @@ IUPACman.prototype = {
 			console.log(properties);
 			if (typeof properties === "string" && properties.includes('errorCode')) {
 				console.log(properties);
-				properties = { formula: '', mass: ''};
+				properties = { elementalAnalysis: { formula: '', mass: '' } };
 			}
 			const formula = properties.elementalAnalysis.formula;
 			const mass = properties.elementalAnalysis.mass;
