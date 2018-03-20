@@ -353,7 +353,7 @@ IUPACman.prototype = {
 			this.acceptorCount.setText("Acceptor count: " + aCount);
 			this.donorCount.setText("Donor count: " + dCount);
 			this.logP.setText("logP: " + logP.toFixed(2));
-	 		this.solubility.setText("Solubility: " + solubility.toFixed(2));
+	 		this.solubility.setText("logS: " + solubility.toFixed(2));
 	 		this.atomCount.setText("Atom count " + atomCount);
 
 			if (currentChallenge && formula === currentChallenge.formula)
