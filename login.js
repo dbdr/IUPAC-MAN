@@ -35,6 +35,8 @@ Login.prototype = {
 		nameInput.x -= nameInput.width / 2;
 		nameInput.startFocus();
 
+		username = null;
+		
 		const enter = () => {
 			console.log('enter', game.isRunning);
 			if (! username) {
