@@ -4,7 +4,8 @@
 
 const Login = function () {};
 
-let username = '???';
+let username;
+let teams;
 
 Login.prototype = {
 
@@ -19,6 +20,7 @@ Login.prototype = {
 
 		const nameInput = game.add.inputField(game.width * 0.5, game.height * 0.7, {
 			max: 3,
+			width: game.width,
 			textAlign : 'center',
 			font: '30px Arial',
 			fill: '#FFF',
@@ -33,15 +35,25 @@ Login.prototype = {
 		nameInput.x -= nameInput.width / 2;
 		nameInput.startFocus();
 
-		const exitState = () => {
-			username = nameInput.text.text;
-			nameText.visible = false;
-			nameInput.visible = false;
-			game.state.start('Game', false);
+		const enter = () => {
+			console.log('enter', game.isRunning);
+			if (! username) {
+				username = nameInput.text.text;
+				nameInput.setText('');
+				nameText.setText('ENTER YOUR TEAM(S)');
+				nameInput.domElement.setMax(25);
+				nameInput.startFocus();
+			}
+			else {
+				teams = nameInput.text.text;
+				nameText.visible = false;
+				nameInput.visible = false;
+				game.state.start('Game', false);
+			}
 		};
 		
-		nameInput.focusOut.add(exitState);
-		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(exitState);
+		nameInput.focusOut.add(enter);
+		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(enter);
 
 	},
 

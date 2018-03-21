@@ -429,7 +429,7 @@ IUPACman.prototype = {
 			
 			if (this.pointsWon <= 0) {
 				// Finished adding the points
-				addScore(username, this.totalScore);
+				addScore(this.totalScore);
 				if (! this.designChallenge)
 					this.nextChallenge();
 			}

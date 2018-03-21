@@ -10,14 +10,19 @@ else
 
 console.log("Loaded highscores:", highscores);
 
-function addScore(username, score) {
-	console.log("Score", username, score);
+function addScore(score) {
+	if (! username)
+		return;
+	
+	console.log("Score", username, teams, score);
 
 	const highscore = highscores.find(h => h.name === username);
-	if (highscore)
+	if (highscore) {
 		highscore.score = Math.max(score, highscore.score);
+		highscore.teams = teams;
+	}
 	else
-		highscores.push({name: username, score: score});
+		highscores.push({name: username, teams: teams, score: score});
 
 	highscores.sort((h1,h2) => h2.score - h1.score);
 	console.log(highscores);
