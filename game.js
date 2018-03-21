@@ -18,7 +18,6 @@ IUPACman.prototype = {
 			game.load.script('chem', 'chem.js');
 			game.load.script('levels', 'levels.js');
 			game.load.script('webservice', 'webservice.js');
-			game.load.script('highscores');
 		}
 		
 		this.load.audio('die', 'assets/sounds/die.ogg');

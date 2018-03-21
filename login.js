@@ -11,6 +11,7 @@ Login.prototype = {
 
 	preload: function () {
 		game.add.plugin(PhaserInput.Plugin);
+		game.load.script('highscores');
 	},
 
 	create: function() {
@@ -30,6 +31,7 @@ Login.prototype = {
 			forceCase: PhaserInput.ForceCase.upper,
 			blockInput: false,
 		});
+		this.nameInput = nameInput;
 		// https://github.com/orange-games/phaser-input/issues/36
 		//nameInput.anchor.set(0.5);
 		nameInput.x -= nameInput.width / 2;
@@ -57,10 +59,22 @@ Login.prototype = {
 		nameInput.focusOut.add(enter);
 		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(enter);
 
+		this.foundUser = game.add.text(game.width * 0.5, game.height * 0.9, "", {fill : '#FFF'});
+		this.foundUser.anchor.set(0.5);
+
 	},
 
 	update: function () {
-
+		const cur = this.nameInput.text.text;
+		const highscore = highscores.find(h => h.name === cur);
+		let text;
+		if (highscore)
+			text = highscore.name + ": " + Math.round(highscore.score) + " points";
+		else if (cur)
+			text = "Welcome " + cur;
+		else
+			text = "";
+		this.foundUser.setText(text);
 	},
 	
 };
