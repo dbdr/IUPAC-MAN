@@ -41,12 +41,14 @@ Splash.prototype = {
 
 		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 
-		this.startAnimation(false);
-		
-		// For intro
-		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
-			this.startAnimation(controlKey.isDown);
-		});
+		const presentationMode = false;
+		if (presentationMode) {
+			game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
+				this.startAnimation(controlKey.isDown);
+			});
+		}
+		else
+			this.startAnimation(false);
 
 		game.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(() => {
 			game.state.start('Boot');
