@@ -52,6 +52,7 @@ Login.prototype = {
 				teams = nameInput.text.text;
 				nameText.visible = false;
 				nameInput.visible = false;
+				this.foundUser.visible = false;
 				game.state.start('Game', false);
 			}
 		};
