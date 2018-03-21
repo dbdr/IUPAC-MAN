@@ -41,25 +41,11 @@ Splash.prototype = {
 
 		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 
+		this.startAnimation(false);
+		
 		// For intro
 		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
-			this.skipLogin = controlKey.isDown;
-			game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
-			this.introText = game.add.text(game.width / 2, game.height / 2, 'CHEMAXON PRESENTS', {fontSize: 16, fill: '#FFF'});
-			this.introText.anchor.set(0.5);
-			setTimeout(() => {
-				this.introText.setText('');
-				setTimeout(() => {
-					this.iupacManTitle = game.add.sprite(game.width / 2, game.height / 2, 'iupac-man-title');
-					this.iupacManTitle.anchor.set(0.5);
-					pacman.movesLeft = Math.round((game.width - pacman.x) / xFactor / 2);
-					pacman.moveX = 1;
-					pacman.moveY = 0;
-					pacman.finalX = pacman.lx + pacman.movesLeft;
-					pacman.finalY = pacman.y;
-					this.opening_song.play();
-				}, 1000);
-			}, 3000);
+			this.startAnimation(controlKey.isDown);
 		});
 
 		game.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(() => {
@@ -68,6 +54,27 @@ Splash.prototype = {
 		
 	},
 
+	startAnimation: function(skipLogin) {
+		this.skipLogin = skipLogin;
+					
+		game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+		this.introText = game.add.text(game.width / 2, game.height / 2, 'CHEMAXON PRESENTS', {fontSize: 16, fill: '#FFF'});
+		this.introText.anchor.set(0.5);
+		setTimeout(() => {
+			this.introText.setText('');
+			setTimeout(() => {
+				this.iupacManTitle = game.add.sprite(game.width / 2, game.height / 2, 'iupac-man-title');
+				this.iupacManTitle.anchor.set(0.5);
+				pacman.movesLeft = Math.round((game.width - pacman.x) / xFactor / 2);
+				pacman.moveX = 1;
+				pacman.moveY = 0;
+				pacman.finalX = pacman.lx + pacman.movesLeft;
+				pacman.finalY = pacman.y;
+				this.opening_song.play();
+			}, 1000);
+		}, 3000);
+	},
+	
 	update: function () {
 
 		if (this.iupacManTitle && (this.iupacManTitle.x - this.iupacManTitle.width / 2 - pacman.x < 100 || pacman.movesLeft === 0)) {
