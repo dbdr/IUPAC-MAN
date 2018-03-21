@@ -28,7 +28,27 @@ function addScore(score) {
 	console.log(highscores);
 	window.localStorage.setItem('highscores', JSON.stringify(highscores));
 }
-	
+
+function getRankedTeams() {
+	let allTeams = [];
+	highscores.forEach(h => {
+		if (! h.teams)
+			return;
+		h.teams.split(",").forEach(t => {
+			const team = allTeams.find(at => t === at.name);
+			if (team) {
+				team.score = team.score + h.score;
+				team.players++;
+			}
+			else
+				allTeams.push({name: t, score: h.score, players: 1 });
+		});
+	});
+	// TODO: tweak team scoring
+	allTeams.sort((t1,t2) => t2.score - t1.score);
+	return allTeams;
+}
+
 const Highscores = function () {};
 
 Highscores.prototype = {
@@ -40,13 +60,17 @@ Highscores.prototype = {
 
 		const headerY = 100;
 
-		const rankX = game.width * 0.15;
-		const scoreX = game.width * 0.3
-		const nameX = game.width * 0.6;
+		const rankX = game.width * 0.0;
+		const IscoreX = game.width * 0.1
+		const InameX = game.width * 0.3;
+		const TscoreX = game.width * 0.5;
+		const TnameX = game.width * 0.7;
 		
 		const rankText = game.add.text(rankX, headerY, "NO.", {fill : '#FFF'});
-		const scoreText = game.add.text(scoreX, headerY, "SCORE", {fill : '#FFF'});
-		const nameText = game.add.text(nameX, headerY, "NAME", {fill : '#FFF'});
+		const IscoreText = game.add.text(IscoreX, headerY, "SCORE", {fill : '#FFF'});
+		const InameText = game.add.text(InameX, headerY, "NAME", {fill : '#FFF'});
+		const TscoreText = game.add.text(TscoreX, headerY, "SCORE", {fill : '#FFF'});
+		const TnameText = game.add.text(TnameX, headerY, "TEAM", {fill : '#FFF'});
 
 		let rank = 0;
 		let Y = headerY;
@@ -57,10 +81,24 @@ Highscores.prototype = {
 			Y += 30;
 			const style = {fill: h.name === username ? '#F00' : '#FFF'};
 			game.add.text(rankX, Y, rank, style);
-			game.add.text(scoreX, Y, Math.round(h.score), style);
-			game.add.text(nameX, Y, h.name, style);
+			game.add.text(IscoreX, Y, Math.round(h.score), style);
+			game.add.text(InameX, Y, h.name, style);
 		});
 
+		const rankedTeams = getRankedTeams();
+		rank = 0;
+		Y = headerY;
+		rankedTeams.forEach(t => {
+			// Display the top 5 plus the last user
+			const ourTeam = teams.split(",").find(name => name === t.name);
+			if (rank++ > 5 && ! ourTeam)
+				return;
+			Y += 30;
+			const style = {fill: ourTeam ? '#F00' : '#FFF'};
+			game.add.text(TscoreX, Y, Math.round(t.score), style);
+			game.add.text(TnameX, Y, t.name, style);
+		});
+		
 		const pressText = game.add.text(game.width / 2, game.height * 0.9, "Press ESC to continue", {fill : '#FFF'});
 		pressText.anchor.setTo(0.5);
 		
