@@ -67,14 +67,14 @@ Login.prototype = {
 
 	update: function () {
 		const cur = this.nameInput.text.text;
-		const highscore = highscores.find(h => h.name === cur);
-		let text;
-		if (highscore)
-			text = highscore.name + ": " + Math.round(highscore.score) + " points";
-		else if (cur)
-			text = "Welcome " + cur;
-		else
-			text = "";
+		let text = "";
+		if (! username) {
+			const highscore = highscores.find(h => h.name === cur);
+			if (highscore)
+				text = highscore.name + ": " + Math.round(highscore.score) + " points";
+			else if (cur && ! username)
+				text = "Welcome " + cur;
+		}
 		this.foundUser.setText(text);
 	},
 	
