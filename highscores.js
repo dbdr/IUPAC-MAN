@@ -60,6 +60,9 @@ Highscores.prototype = {
 			game.add.text(scoreX, Y, Math.round(h.score), style);
 			game.add.text(nameX, Y, h.name, style);
 		});
+
+		const pressText = game.add.text(game.width / 2, game.height * 0.9, "Press ESC to continue", {fill : '#FFF'});
+		pressText.anchor.setTo(0.5);
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
 			game.state.start('Splash', true);
