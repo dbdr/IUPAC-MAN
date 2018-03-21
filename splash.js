@@ -20,6 +20,7 @@ Splash.prototype = {
 		
 		if (typeof pacman === 'undefined') {
 			this.loadScript('pacman');
+			this.loadScript('boot');
 			this.loadScript('login');
 			this.loadScript('game');
 		}
@@ -38,8 +39,11 @@ Splash.prototype = {
 
 		createPacman(-20);
 
+		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
+
 		// For intro
 		game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
+			this.skipLogin = controlKey.isDown;
 			game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
 			this.introText = game.add.text(game.width / 2, game.height / 2, 'CHEMAXON PRESENTS', {fontSize: 16, fill: '#FFF'});
 			this.introText.anchor.set(0.5);
@@ -57,14 +61,11 @@ Splash.prototype = {
 				}, 1000);
 			}, 3000);
 		});
-		/*
-		this.status.setText('Ready!');
-		this.addGameMusic();
 
-		setTimeout(function () {
-			//game.state.start("GameMenu");
-		}, 5000);
-		*/
+		game.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(() => {
+			game.state.start('Boot');
+		});
+		
 	},
 
 	update: function () {
@@ -77,7 +78,10 @@ Splash.prototype = {
 				// Only show after intro
 				this.cxnLogo.visible = true;
 				this.copyrightText.visible = true;
-				game.state.start('Login', false);
+				if (this.skipLogin)
+					game.state.start('Game', false);
+				else
+					game.state.start('Login', false);
 			}
 		}
 

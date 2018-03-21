@@ -73,8 +73,17 @@ IUPACman.prototype = {
 		});
 
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
-			this.die.play();
-			this.die.onStop.add(() => game.state.start('Highscores', true));
+			if (username) {
+				this.die.play();
+				this.die.onStop.add(() => game.state.start('Highscores', true));
+			}
+			else {
+				this.clearCanvas();
+				this.molecularMass.visible = false;
+				this.iupacName.visible = false;
+				this.molecularFormula.visible = false;
+				game.state.start('Login', false);
+			}
 		});
 		
 		// Fullscreen
@@ -118,12 +127,17 @@ IUPACman.prototype = {
 		this.hintText.anchor.set(1, 0);
 
 		reloadLevels();
-		
-		game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
-			this.nextChallenge();
-			this.curScoreText.visible = true;
-			this.totalScoreText.visible = true;
-		});
+
+		if (username) {
+			game.input.keyboard.addKey(Phaser.Keyboard.ENTER).onDown.add(() => {
+				this.nextChallenge();
+				this.curScoreText.visible = true;
+				this.totalScoreText.visible = true;
+			});
+		}
+		else {
+			this.helpText.visible = false;
+		}
 
 		game.input.keyboard.addKey(Phaser.Keyboard.H).onDown.add(() => {
 			this.hintText.setText(getNextHint());
