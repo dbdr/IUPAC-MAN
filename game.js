@@ -85,18 +85,20 @@ IUPACman.prototype = {
 			}
 		});
 		
+		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
+		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+
 		// Fullscreen
 		game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 		game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(() => {
+			if (! controlKey.isDown)
+				return;
 			if (game.scale.isFullScreen)
 				game.scale.stopFullScreen();
 			else
 				game.scale.startFullScreen(false);
 		});
 	
-		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
-		const shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-
 		game.input.keyboard.addKey(Phaser.Keyboard.X).onDown.add(() => {
 			if (controlKey.isDown)
 				this.clearCanvas();
@@ -168,6 +170,10 @@ IUPACman.prototype = {
 		game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(() => { this.keyAtom('C', 6); });
 		game.input.keyboard.addKey(Phaser.Keyboard.O).onDown.add(() => { this.keyAtom('O', 8, '#F00'); });
 		game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(() => { this.keyAtom('N', 7, '#00F'); });
+		game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(() => { if (controlKey.isDown) return; this.keyAtom('F', 9, '#A55'); });
+		game.input.keyboard.addKey(Phaser.Keyboard.I).onDown.add(() => { this.keyAtom('I', 53, '#A0A'); });
+		// Sulfur
+		game.input.keyboard.addKey(Phaser.Keyboard.U).onDown.add(() => { this.keyAtom('S', 16, '#6C4'); });
 	},
 
 	teleportPacman : function(x, y) {
