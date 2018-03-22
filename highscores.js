@@ -13,6 +13,9 @@ else
 console.log("Loaded highscores:", highscores);
 
 const globalHS = [
+	{"name":"SOZ","teams":"CXN","score":13680.221722897084},{"name":"MCS","teams":"CXN","score":12642.875091231797},{"name":"DBR","teams":"CXN","score":11600.259426366949},{"name":"PRD","teams":"PRDEL","score":9967.539241716822},{"name":"ZT","teams":"CONS","score":8682.53649982948},{"name":"SXS","teams":"JC4E","score":3782.8352679186764},
+	{"name":"LNC","teams":"CXN","score":13647.481022051796},{"name":"BK","teams":"MCULE","score":12467.54688637997},{"name":"ACL","teams":"FRANCE","score":11752.290474378873},{"name":"SOZ","teams":"CXN","score":11006.087866625405},{"name":"ASD","teams":"ASD","score":10288.746886379971},{"name":"ZT","teams":"C","score":8658.310762316518},{"name":"RK","teams":"AFO","score":7041.7152102257905},{"name":"PC","teams":"CXN","score":5178.610228485887},{"name":"DBR","teams":"CXN","score":1980.9812622556383},{"name":"AAA","teams":"C,F","score":1954.8465609082712},{"name":"VKM","teams":"I","score":1935.1889347143651},{"name":"ARU","teams":"PAT","score":1868.3033690388493},{"name":"NAT","teams":"SLV","score":1858.6316667474046},
+	{"name":"RHO","teams":"ELSEVIER","score":9657.714679868533},{"name":"A","teams":"CREG","score":7833.009785988286},{"name":"PC","teams":"CXN","score":7353.588341067268},{"name":"FLC","teams":"NVLX","score":3461.3002233989405},{"name":"DBR","teams":"CXN","score":1984.3226097648096},{"name":"MIC","teams":"CHEMAXON","score":1894.0342429254692}
 ];
 
 function addScore(score) {
@@ -102,7 +105,7 @@ Highscores.prototype = {
 		let Y = headerY;
 		highscores.forEach(h => {
 			// Display the top 5 plus the last user
-			if (rank++ > 5 && h.name !== username)
+			if (++rank > 8 && h.name !== username)
 				return;
 			Y += 30;
 			const style = {fill: h.name === username ? '#F00' : '#FFF'};
@@ -117,7 +120,7 @@ Highscores.prototype = {
 		rankedTeams.forEach(t => {
 			// Display the top N plus the last user
 			const ourTeam = teams.split(",").find(name => name === t.name);
-			if (rank++ > 8 && ! ourTeam)
+			if (++rank > 8 && ! ourTeam)
 				return;
 			Y += 30;
 			const style = {fill: ourTeam ? '#F00' : '#FFF'};
