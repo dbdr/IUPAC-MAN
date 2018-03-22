@@ -80,7 +80,7 @@ Highscores.prototype = {
 
 	create: function() {
 
-		const headerY = 100;
+		const headerY = game.width * 0.1;
 
 		const rankX = game.width * 0.0;
 		const IscoreX = game.width * 0.1
@@ -111,9 +111,9 @@ Highscores.prototype = {
 		rank = 0;
 		Y = headerY;
 		rankedTeams.forEach(t => {
-			// Display the top 5 plus the last user
+			// Display the top N plus the last user
 			const ourTeam = teams.split(",").find(name => name === t.name);
-			if (rank++ > 5 && ! ourTeam)
+			if (rank++ > 8 && ! ourTeam)
 				return;
 			Y += 30;
 			const style = {fill: ourTeam ? '#F00' : '#FFF'};
