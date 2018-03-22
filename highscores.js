@@ -134,7 +134,7 @@ Highscores.prototype = {
 		pressText.anchor.setTo(0.5);
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
-			const showCredits = false;
+			const showCredits = true;
 			if (showCredits)
 				game.state.start('Credits', true);
 			else
