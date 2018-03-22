@@ -30,11 +30,16 @@ Credits.prototype = {
 			 "Namco (c) 1980\n",
 			 {align: 'center', fontSize: 16, fill: '#FFF'});
 		this.creditsText.anchor.set(0.5, 0);
-		
+
+		game.input.keyboard.reset(true);
 		game.input.keyboard.onPressCallback = e => {
 			game.input.keyboard.onPressCallback = null;
 			game.state.start('Splash', true);
 		};
+		// somehow the above does not capture ESC
+		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
+			game.state.start('Splash', true);
+		});
 	},
 
 	update: function () {
