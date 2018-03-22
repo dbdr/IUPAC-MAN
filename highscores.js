@@ -54,6 +54,7 @@ const Highscores = function () {};
 Highscores.prototype = {
 
 	preload: function () {
+		game.load.script('credits');
 	},
 
 	create: function() {
@@ -103,7 +104,11 @@ Highscores.prototype = {
 		pressText.anchor.setTo(0.5);
 		
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
-			game.state.start('Splash', true);
+			const showCredits = false;
+			if (showCredits)
+				game.state.start('Credits', true);
+			else
+				game.state.start('Splash', true);
 		});
 
 	},

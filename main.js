@@ -22,7 +22,6 @@ Main.prototype = {
 	},
 
 	create: function () {
-		game.state.add('Splash', Splash);
 		game.state.start('Splash');
 	}
 

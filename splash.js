@@ -97,3 +97,5 @@ Splash.prototype = {
 	},
 	
 };
+
+game.state.add('Splash', Splash);
