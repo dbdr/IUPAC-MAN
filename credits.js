@@ -2,6 +2,8 @@
 
 'use strict';
 
+console.log("Loading Credits");
+
 const Credits = function () {};
 
 Credits.prototype = {

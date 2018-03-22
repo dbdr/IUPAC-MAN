@@ -11,7 +11,8 @@ Login.prototype = {
 
 	preload: function () {
 		game.add.plugin(PhaserInput.Plugin);
-		game.load.script('highscores');
+		if (typeof Highscores === "undefined")
+			game.load.script('highscores');
 	},
 
 	create: function() {

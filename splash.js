@@ -2,6 +2,8 @@
 
 'use strict';
 
+console.log("Loading Splash");
+
 const Splash = function () {};
 
 Splash.prototype = {

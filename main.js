@@ -2,6 +2,8 @@
 
 'use strict';
 
+console.log("Loading Main");
+
 const game = new Phaser.Game(600, 400),
 	  Main = function () {};
 

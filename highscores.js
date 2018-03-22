@@ -2,6 +2,8 @@
 
 'use strict';
 
+console.log("Loading Highscores");
+
 let highscores = window.localStorage.getItem('highscores');
 if (highscores)
 	highscores = JSON.parse(highscores);
@@ -75,7 +77,8 @@ const Highscores = function () {};
 Highscores.prototype = {
 
 	preload: function () {
-		game.load.script('credits');
+		if (typeof Credits === "undefined")
+			game.load.script('credits');
 	},
 
 	create: function() {

@@ -2,6 +2,8 @@
 
 'use strict';
 
+console.log("Loading Game");
+
 const bondLength = 20;
 const doubleBondRatio = 14;
 
