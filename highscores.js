@@ -30,8 +30,9 @@ function addScore(score) {
 		highscores.push(score);
 
 	highscores.sort((h1,h2) => h2.score - h1.score);
-	console.log(highscores);
-	window.localStorage.setItem('highscores', JSON.stringify(highscores));
+	const hsData = JSON.stringify(highscores);
+	console.log(hsData);
+	window.localStorage.setItem('highscores', hsData);
 }
 
 function merge(teams1, teams2) {
