@@ -10,24 +10,41 @@ else
 
 console.log("Loaded highscores:", highscores);
 
+const globalHS = [
+];
+
 function addScore(score) {
-	if (! username)
+	console.log("Score", score);
+
+	if (! score.name)
 		return;
 	
-	console.log("Score", username, teams, score);
-
-	const highscore = highscores.find(h => h.name === username);
+	const highscore = highscores.find(h => h.name === score.name);
 	if (highscore) {
-		highscore.score = Math.max(score, highscore.score);
-		highscore.teams = teams;
+		highscore.score = Math.max(score.score, highscore.score);
+		highscore.teams = merge(highscore.teams, score.teams);
 	}
 	else
-		highscores.push({name: username, teams: teams, score: score});
+		highscores.push(score);
 
 	highscores.sort((h1,h2) => h2.score - h1.score);
 	console.log(highscores);
 	window.localStorage.setItem('highscores', JSON.stringify(highscores));
 }
+
+function merge(teams1, teams2) {
+	let all = [];
+	[teams1,teams2].forEach(teams => {
+		if (teams)
+			teams.split(",").forEach(team => {
+				if (! all.find(t => t === team))
+					all.push(team);
+			});
+	});
+	return all.join(",");
+}
+
+globalHS.forEach(hs => addScore(hs));
 
 function getRankedTeams() {
 	let allTeams = [];
