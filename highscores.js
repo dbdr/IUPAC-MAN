@@ -54,14 +54,18 @@ function getRankedTeams() {
 		h.teams.split(",").forEach(t => {
 			const team = allTeams.find(at => t === at.name);
 			if (team) {
-				team.score = team.score + h.score;
+				team.scores.push(h.score);
 				team.players++;
 			}
 			else
-				allTeams.push({name: t, score: h.score, players: 1 });
+				allTeams.push({name: t, scores: [h.score, 0, 0], players: 1 });
 		});
 	});
-	// TODO: tweak team scoring
+	allTeams.forEach(team => {
+		team.scores.sort((s1,s2) => s2 - s1);
+		const top = team.scores.slice(0, 2);
+		team.score = top.reduce((acc, s) => acc +s) / top.length;
+	});
 	allTeams.sort((t1,t2) => t2.score - t1.score);
 	return allTeams;
 }
