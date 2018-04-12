@@ -94,7 +94,7 @@ Highscores.prototype = {
 
 	create: function() {
 
-		const headerY = game.width * 0.1;
+		const headerY = game.height * 0.1;
 
 		const rankX = game.width * 0.0;
 		const IscoreX = game.width * 0.1
@@ -108,14 +108,16 @@ Highscores.prototype = {
 		const TscoreText = game.add.text(TscoreX, headerY, "SCORE", {fill : '#FFF'});
 		const TnameText = game.add.text(TnameX, headerY, "TEAM", {fill : '#FFF'});
 
+		const lineHeight = 25;
+		
 		let rank = 0;
-		let Y = headerY;
+		let Y = headerY + 10;
 		highscores.forEach(h => {
 			// Display the top 5 plus the last user
-			if (++rank > 8 && h.name !== username)
+			if (++rank > 10 && h.name !== username)
 				return;
-			Y += 30;
-			const style = {fill: h.name === username ? '#F00' : '#FFF'};
+			Y += lineHeight;
+			const style = {font: '24px Arial', fill: h.name === username ? '#F00' : '#FFF'};
 			game.add.text(rankX, Y, rank, style);
 			game.add.text(IscoreX, Y, Math.round(h.score), style);
 			game.add.text(InameX, Y, h.name, style);
@@ -123,14 +125,14 @@ Highscores.prototype = {
 
 		const rankedTeams = getRankedTeams();
 		rank = 0;
-		Y = headerY;
+		Y = headerY + 10;
 		rankedTeams.forEach(t => {
 			// Display the top N plus the last user
 			const ourTeam = teams.split(",").find(name => name === t.name);
-			if (++rank > 8 && ! ourTeam)
+			if (++rank > 10 && ! ourTeam)
 				return;
-			Y += 30;
-			const style = {fill: ourTeam ? '#F00' : '#FFF'};
+			Y += lineHeight;
+			const style = {font: '24px Arial', fill: ourTeam ? '#F00' : '#FFF'};
 			game.add.text(TscoreX, Y, Math.round(t.score), style);
 			game.add.text(TnameX, Y, t.name, style);
 		});
