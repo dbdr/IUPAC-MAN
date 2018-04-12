@@ -17,6 +17,9 @@ Login.prototype = {
 
 	create: function() {
 
+		if (! pacman)
+			createPacman(game.width / 2 / xFactor);
+
 		const nameText = game.add.text(game.width * 0.5, game.height * 0.6, "ENTER YOUR NAME", {fill : '#FFF'});
 		nameText.anchor.set(0.5);
 

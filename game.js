@@ -73,6 +73,11 @@ IUPACman.prototype = {
 			game.sound.mute = ! game.sound.mute;
 		});
 
+		game.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(() => {
+			pacman = null;
+			game.state.start('Login', true);
+		});
+		
 		game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(() => {
 			if (username) {
 				this.die.play();

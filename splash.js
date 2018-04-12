@@ -6,6 +6,8 @@ console.log("Loading Splash");
 
 const Splash = function () {};
 
+var skipLogin = false;
+
 Splash.prototype = {
 
 	loadScript: function (scriptName) {
@@ -43,30 +45,23 @@ Splash.prototype = {
 
 		const controlKey = game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
 
-		const presentationMode = false;
-		if (presentationMode) {
-			game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(() => {
-				this.startAnimation(controlKey.isDown);
-			});
-		}
-		else
-			this.startAnimation(false);
+		this.startAnimation();
 
 		game.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(() => {
-			game.state.start('Boot');
+			if (this.timeoutID)
+				window.clearTimeout(this.timeoutID);
+			game.state.start('Boot', true);
 		});
 		
 	},
 
-	startAnimation: function(skipLogin) {
-		this.skipLogin = skipLogin;
-					
-		game.input.keyboard.removeKey(Phaser.Keyboard.SPACEBAR);
+	startAnimation: function() {
 		this.introText = game.add.text(game.width / 2, game.height / 2, 'CHEMAXON PRESENTS', {fontSize: 16, fill: '#FFF'});
 		this.introText.anchor.set(0.5);
-		setTimeout(() => {
+		this.timeoutID = setTimeout(() => {
 			this.introText.setText('');
-			setTimeout(() => {
+			this.timeoutID = setTimeout(() => {
+				this.timeoutID = null;
 				this.iupacManTitle = game.add.sprite(game.width / 2, game.height / 2, 'iupac-man-title');
 				this.iupacManTitle.anchor.set(0.5);
 				pacman.movesLeft = Math.round((game.width - pacman.x) / xFactor / 2);
@@ -89,7 +84,7 @@ Splash.prototype = {
 				// Only show after intro
 				this.cxnLogo.visible = true;
 				this.copyrightText.visible = true;
-				if (this.skipLogin)
+				if (skipLogin)
 					game.state.start('Game', false);
 				else
 					game.state.start('Login', false);
