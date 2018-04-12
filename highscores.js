@@ -21,6 +21,8 @@ const globalHS = [
 	{"name":"BOB","teams":"CXN","score":14706},
 	{"name":"JEV","teams":"SWEDEN,SPRINTBIOSCIENCE","score":14043},
 	*/
+	// USUGM 2018
+	{"name":"DBR","teams":"CXN,FR","score":14247.041818475493},{"name":"MCS","teams":"CXN,HU","score":14049.31514835557},{"name":"RK","teams":"GER","score":13995.130796561201},{"name":"AP","teams":"CXN,HU","score":12636.689503441781},{"name":"VA","teams":"HU","score":12593.294905097879},{"name":"IAN","teams":"IDBS","score":12198.954441037662},{"name":"T","teams":"CXN","score":9771.29748579934},{"name":"SCT","teams":"PFE","score":8932.814137504252},{"name":"DD","teams":"SCILLIGENCE","score":8505.229562384622},{"name":"NAT","teams":"IDBS,FR","score":4152.279561260049},
 ];
 
 function addScore(score) {
